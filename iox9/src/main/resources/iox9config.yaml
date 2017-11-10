@@ -16,52 +16,50 @@ almost_full: 25
 
 # Sources list
 sources:
-    source:
-        - 
-            id: entrance_camera
+    - 
+        id: entrance_camera
+        source_class: "AddressCamera"
+        processor_class: "InProcessor"
+        active: true
+        parameters:
             address: "192.168.7.7"
-            port: 5502 
-            interface_class: "DataSourceCamera"
-            processor_class: "InProcessor"
-            active: true
-        -
-            id: exit_camera
+    -
+        id: exit_camera
+        source_class: "AddressCamera"
+        processor_class: "OutProcessor"
+        active: true
+        parameters:
             address: "192.169.7.7"
-            port: 5503
-            interface_class: "DataSourceCamera"
-            processor_class: "OutProcessor"
-            active: true
 
 # Statistics processors registration
 statictics_processors:
-    statistics_processor:
-        -
-            id: weekly_statistics
-            sources:
-                - exit_camera
-        -
-            id: length_of_stay
-            sources:
-                - entrance_camera
-                - exit_camera
+    -
+        id: weekly_statistics
+        sources:
+            - exit_camera
+    -
+        id: length_of_stay
+        sources:
+            - entrance_camera
+            - exit_camera
 
 # Views registration
 views:
-    view:
-        -
-            id: entrance_panel
-            publishers:
-                - entrance_camera
-        -
-            id: exit_panel
-            publishers:
-                - exit_camera
+    -
+        id: entrance_panel
+        class: "PanelIn"
+        publishers:
+            - entrance_camera
+    -
+        id: exit_panel
+        class: "PanelOut"
+        publishers:
+            - exit_camera
 
 notification_agents:
-    notification_agent:
-        -
-            id: entrance_goal
-            class: "EntranceGoalNotificationAgent"
-        -
-            id: almost_full_alert
-            class: "AlmostFullNotificationAgent"
+    -
+        id: entrance_goal
+        class: "EntranceGoalNotificationAgent"
+    -
+        id: almost_full_alert
+        class: "AlmostFullNotificationAgent"
