@@ -20,20 +20,54 @@ import pso.secondphase.iox9.model.ModelAbstractFactory;
 public abstract class EntityProcessor<IdentityDataType> extends Observable {
     
     private final ModelAbstractFactory modelAbstractFactory;
+    private final EntityRecognizer entityRecognizer;
     
-    public EntityProcessor(ModelAbstractFactory modelAbstractFactory) {
+    public EntityProcessor(ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer) {
         this.modelAbstractFactory = modelAbstractFactory;
+        this.entityRecognizer = entityRecognizer;
     }
     
     public void process(IdentityDataType identityData) {
     
-        String identifier = null;
+        String identifier = this.entityRecognizer.recognize(identityData);
         
         Entity e = this.modelAbstractFactory.createEntity(identifier);
                 
-        IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date());
+        if(isValid(e)) {
+        
+            collect(e);
+            
+            IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date());
+        
+            persist(e);
+            
+            notifyAll();
+        }
         
     }
+    
+    /**
+     * Method for validating the entity. 
+     * 
+     * For example, check if the entity in exiting only if
+     * there is an unmatched entering record.
+     * 
+     * @param e The entity.
+     * @return True if the entity is valid.
+     */
+    protected abstract boolean isValid(Entity e); 
+    
+    /**
+     * 
+     * @param e 
+     */
+    protected abstract void collect(Entity e);
+    
+    /**
+     * 
+     * @param e 
+     */
+    protected abstract void persist(Entity e);
     
     
 }
