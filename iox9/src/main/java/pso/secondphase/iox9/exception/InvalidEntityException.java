@@ -6,13 +6,12 @@
 package pso.secondphase.iox9.exception;
 
 /**
- *
+ * Thrown when an entity is invalid.
+ * 
  * @author vitorgreati
  */
-public class FailedOpeningSourceException extends Exception {
-    
-    public FailedOpeningSourceException() {
-        super("Failed to open the source.");
+public class InvalidEntityException extends Exception {
+    public InvalidEntityException() {
+        super("Invalid entity.");
     }
-    
 }

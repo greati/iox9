@@ -2,7 +2,9 @@ package pso.secondphase.iox9.business.capture;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.exception.FailedOpeningSourceException;
+import pso.secondphase.iox9.exception.InvalidEntityException;
 
 /**
  * Thread for getting raw identity data from identity data sources.
@@ -19,11 +21,14 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
     private volatile boolean active;
     private final Long sleepTime;
     private final IdentityDataSource<IdentityDataType> identityDataSource;
+    private final EntityProcessor<IdentityDataType> processor;
 
-    public IdentityDataReceiver(IdentityDataSource<IdentityDataType> identityDataSource, Long sleepTime) {
+    public IdentityDataReceiver(IdentityDataSource<IdentityDataType> identityDataSource,
+            EntityProcessor processor, Long sleepTime) {
         this.active = true;
         this.sleepTime = sleepTime;
         this.identityDataSource = identityDataSource;
+        this.processor = processor;
         
         try {
             this.identityDataSource.setup();
@@ -35,15 +40,19 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
     @Override
     public void run() {
         while (isActive()) {
-
-            IdentityDataType data = identityDataSource.getData();
-            
-            //TODO
-            //updater.update(ds.getSourceOutput());
- 
             try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException ex) {
+                
+                IdentityDataType data = identityDataSource.getData();
+                
+                processor.process(identityDataSource.getData());
+                
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            } catch (InvalidEntityException ex) {
                 Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

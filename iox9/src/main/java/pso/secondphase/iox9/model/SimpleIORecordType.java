@@ -6,7 +6,7 @@
 package pso.secondphase.iox9.model;
 
 /**
- * The simplest types of IO records.
+ * The simplest types of IO records, IN and OUT.
  * 
  * @author vitorgreati
  */

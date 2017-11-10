@@ -11,6 +11,7 @@ public abstract class EntityRecognizer<IdentityDataType> {
     /**
      * Returns the identifier of the entity.
      * 
+     * @param identityData Raw data coming from a data source.
      * @return Entity identifier.
      */
     public abstract String recognize(IdentityDataType identityData);

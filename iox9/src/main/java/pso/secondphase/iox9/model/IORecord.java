@@ -26,4 +26,16 @@ public class IORecord {
         this.type = type;
     }
     
+    public Entity getEntity() {
+        return this.entity;
+    }
+    
+    public Date getInstant() {
+        return this.instant;
+    }
+    
+    public IORecordType getType() {
+        return this.type;
+    }
+    
 }

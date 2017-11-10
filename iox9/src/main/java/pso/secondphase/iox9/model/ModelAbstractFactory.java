@@ -16,6 +16,6 @@ public abstract class ModelAbstractFactory {
     
     public abstract Entity createEntity(String identifier);
     
-    public abstract IORecord createIORecord(Entity entity, Date instant);
+    public abstract IORecord createIORecord(Entity entity, Date instant, IORecordType type);
     
 }
