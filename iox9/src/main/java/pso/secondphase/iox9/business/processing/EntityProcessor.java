@@ -2,6 +2,7 @@ package pso.secondphase.iox9.business.processing;
 
 import java.util.Date;
 import java.util.Observable;
+import pso.secondphase.iox9.business.notification.NotificationAgentChain;
 import pso.secondphase.iox9.exception.InvalidEntityException;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
@@ -23,10 +24,13 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
     
     private final ModelAbstractFactory modelAbstractFactory;
     private final EntityRecognizer entityRecognizer;
+    private final NotificationAgentChain notificationAgentChain;
     
-    public EntityProcessor(ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer) {
+    public EntityProcessor(ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer,
+            NotificationAgentChain notificationAgentChain) {
         this.modelAbstractFactory = modelAbstractFactory;
         this.entityRecognizer = entityRecognizer;
+        this.notificationAgentChain = notificationAgentChain;
     }
     
     public void process(IdentityDataType identityData) throws InvalidEntityException {
@@ -42,6 +46,8 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
             IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), createRecordType());
         
             persist(ioRecord);
+            
+            notificationAgentChain.handle(ioRecord, this);
             
             notifyAll();
         } else {
