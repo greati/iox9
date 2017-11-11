@@ -24,7 +24,7 @@ public class SarxosAddressCameraDataSource extends IdentityDataSource<Image> {
         Webcam.setDriver(new IpCamDriver());
     }
     
-    public SarxosAddressCameraDataSource(String id, String address) throws FailedOpeningSourceException {
+    public SarxosAddressCameraDataSource(String id, String address) {
         super(id);
         this.address = address;
     }
