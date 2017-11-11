@@ -44,13 +44,14 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
         this.ioType = ioType;
     }
     
-    public void process(IdentityDataType identityData) throws InvalidEntityException {
+    public void process(IdentityDataType identityData) {
     
-        String identifier = this.entityRecognizer.recognize(identityData);
-        
-        Entity e = this.modelAbstractFactory.createEntity(identifier);
-                
-        if(validate(e)) {
+        try {
+            String identifier = this.entityRecognizer.recognize(identityData);
+            
+            Entity e = this.modelAbstractFactory.createEntity(identifier);
+            
+            validate(e);
         
             IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
         
@@ -61,10 +62,9 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
             notificationAgentChain.handle(ioRecord, this);
             
             notifyObservers(ioRecord);
-        } else {
-            throw new InvalidEntityException();
+        } catch (InvalidEntityException ex) {
+            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     /**
@@ -75,8 +75,9 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
      * 
      * @param e The entity.
      * @return True if the entity is valid.
+     * @throws pso.secondphase.iox9.exception.InvalidEntityException
      */
-    protected abstract boolean validate(Entity e); 
+    protected abstract boolean validate(Entity e) throws InvalidEntityException; 
     
     /**
      * Collect complementary data.
