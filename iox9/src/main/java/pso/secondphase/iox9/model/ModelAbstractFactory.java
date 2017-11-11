@@ -17,5 +17,5 @@ public interface ModelAbstractFactory {
     public  Entity createEntity(String identifier);
     
     public  IORecord createIORecord(Entity entity, Date instant, IORecordType type);
-    
+   
 }

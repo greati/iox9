@@ -5,9 +5,13 @@
  */
 package pso.secondphase.rapx9.control;
 
+import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
+import pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource;
 import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
+import pso.secondphase.iox9.dao.JDBCEntityDAO;
+import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
 import pso.secondphase.iox9.model.VehicleFactory;
 import pso.secondphase.rapx9.view.VehicleInPanel;
@@ -24,11 +28,24 @@ public class MainControl {
     VehicleOutPanel outPanel = new VehicleOutPanel();
         
     // Processors
-    //VehicleInProcessor inProcessor = 
-    //        new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
-    //        new OpenCVUFRNLicensePlateReconizer(), null, );
-    //VehicleOutProcessor outProcessor = 
-    //        new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory());
+    VehicleInProcessor inProcessor = 
+            new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
+            new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
+            new JDBCIORecordDAO());
+
+    VehicleInProcessor outProcessor = 
+            new VehicleInProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
+            new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
+            new JDBCIORecordDAO());
+    
+    // Sources
+    //SarxosAddressCameraDataSource inCameraDs = new SarxosAddressCameraDataSource("entrance_camera", 
+    //                                            "192.168.7.8:8080");
+    //SarxosAddressCameraDataSource outCameraDs = new SarxosAddressCameraDataSource("entrance_camera", 
+    //                                            "192.168.7.8:8080");
+    
+    // Threads
+    //IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(, inProcessor, Long.MIN_VALUE);
     
     // Create threads
     public static void main(String args[]) {

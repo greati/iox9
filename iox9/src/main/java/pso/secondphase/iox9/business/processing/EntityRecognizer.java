@@ -14,6 +14,6 @@ public interface EntityRecognizer<IdentityDataType> {
      * @param identityData Raw data coming from a data source.
      * @return Entity identifier.
      */
-    public abstract String recognize(IdentityDataType identityData);
+    public String recognize(IdentityDataType identityData);
     
 }

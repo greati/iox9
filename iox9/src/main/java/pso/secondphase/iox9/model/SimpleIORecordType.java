@@ -12,16 +12,17 @@ package pso.secondphase.iox9.model;
  */
 public enum SimpleIORecordType implements IORecordType {
 
-    IN("0"), OUT("1");
+    IN(new Long(0)),
+    OUT(new Long(1));
 
-    String ioRecordType;
+    Long ioRecordType;
 
-    SimpleIORecordType(String ioRecordType) {
+    SimpleIORecordType(Long ioRecordType) {
         this.ioRecordType = ioRecordType;
     }
     
     @Override
-    public String getIORecordType() {
+    public Long getIORecordType() {
         return this.ioRecordType;
     }
     
