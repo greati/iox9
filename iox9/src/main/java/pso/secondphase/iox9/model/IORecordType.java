@@ -7,6 +7,6 @@ package pso.secondphase.iox9.model;
  */
 public interface IORecordType {
     
-    public String getIORecordType();
+    public Long getIORecordType();
     
 }
