@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.business.processing;
 
+import java.awt.Image;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
@@ -16,7 +17,7 @@ import pso.secondphase.iox9.model.ModelAbstractFactory;
  *
  * @author vitorgreati
  */
-public class VehicleInProcessor extends EntityProcessor {
+public class VehicleInProcessor extends EntityProcessor<Image> {
 
     public VehicleInProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer, NotificationAgent notificationAgentChain, EntityDAO entityDAO, IORecordDAO ioDAO) {
         super(ioType, modelAbstractFactory, entityRecognizer, notificationAgentChain, entityDAO, ioDAO);

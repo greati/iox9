@@ -40,21 +40,15 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
     @Override
     public void run() {
         while (isActive()) {
+
+            processor.process(identityDataSource.getData());
+
             try {
-                
-                IdentityDataType data = identityDataSource.getData();
-                
-                processor.process(identityDataSource.getData());
-                
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            } catch (InvalidEntityException ex) {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException ex) {
                 Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
     }
     

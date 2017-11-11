@@ -6,7 +6,7 @@ package pso.secondphase.iox9.business.processing;
  * @author vitorgreati
  * @param <IdentityDataType>
  */
-public abstract class EntityRecognizer<IdentityDataType> {
+public interface EntityRecognizer<IdentityDataType> {
     
     /**
      * Returns the identifier of the entity.
