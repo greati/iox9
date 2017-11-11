@@ -25,7 +25,8 @@ import pso.secondphase.iox9.model.ModelAbstractFactory;
  * @author vitorgreati
  * @param <IdentityDataType> Identity data type.
  */
-public abstract class EntityProcessor<IdentityDataType> extends Observable<Observer<IORecord, EntityProcessor>> {
+
+public abstract class EntityProcessor<IdentityDataType> extends Observable<Observer<IORecord>> {
     
     private final ModelAbstractFactory modelAbstractFactory;
     private final EntityRecognizer entityRecognizer;

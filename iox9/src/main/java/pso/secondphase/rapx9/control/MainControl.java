@@ -49,11 +49,19 @@ public class MainControl {
         InDataSourceSavedImage outCameraDs = new InDataSourceSavedImage("exit_camera", database);
 
         // Threads
-        IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, Long.MIN_VALUE);
-        IdentityDataReceiver outDataReceiver = new IdentityDataReceiver(outCameraDs, inProcessor, Long.MIN_VALUE);
+        IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
+        IdentityDataReceiver outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
         
         // Registrar views
         inProcessor.addObserver(inPanel);
+        outProcessor.addObserver(outPanel);
+        
+        // Start thread
+        inDataReceiver.start();
+        inDataReceiver.setDaemon(true);
+        outDataReceiver.start();
+        outDataReceiver.setDaemon(true);
+
     }
     
 }

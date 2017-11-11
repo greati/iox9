@@ -16,7 +16,7 @@ import pso.secondphase.iox9.model.Notification;
  * 
  * @author vitorgreati
  */
-public class NotifierChainSingleton extends Observable<Observer<Notification, EntityProcessor>> {
+public class NotifierChainSingleton extends Observable<Observer<Notification>> {
     
     private NotificationAgent notifierHead;
     
