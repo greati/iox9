@@ -24,7 +24,7 @@ public class VehicleInProcessor extends EntityProcessor {
 
     @Override
     protected boolean validate(Entity e) {
-        // Check if the vehicle is there already
+        // Check if the vehicle is there already. Must throw InvalidEntityException otherwise.
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -24,7 +24,7 @@ public class VehicleOutProcessor extends EntityProcessor {
 
     @Override
     protected boolean validate(Entity e) {
-        /* Check if that vehicle was inside */
+        /* Check if that vehicle was inside. Must throw InvalidEntityException otherwise. */
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
