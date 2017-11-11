@@ -1,7 +1,13 @@
 package pso.secondphase.iox9.business.processing;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.dao.EntityDAO;
+import pso.secondphase.iox9.dao.IORecordDAO;
+import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
+import pso.secondphase.iox9.exception.FailAtPersistingException;
 import pso.secondphase.iox9.exception.InvalidEntityException;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
@@ -24,12 +30,18 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
     private final ModelAbstractFactory modelAbstractFactory;
     private final EntityRecognizer entityRecognizer;
     private final NotificationAgent notificationAgentChain;
+    protected final EntityDAO entityDAO;
+    protected final IORecordDAO ioDAO;
+    private final IORecordType ioType;
     
-    public EntityProcessor(ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer,
-            NotificationAgent notificationAgentChain) {
+    public EntityProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer,
+            NotificationAgent notificationAgentChain, EntityDAO entityDAO, IORecordDAO ioDAO) {
         this.modelAbstractFactory = modelAbstractFactory;
         this.entityRecognizer = entityRecognizer;
         this.notificationAgentChain = notificationAgentChain;
+        this.entityDAO = entityDAO;
+        this.ioDAO = ioDAO;
+        this.ioType = ioType;
     }
     
     public void process(IdentityDataType identityData) throws InvalidEntityException {
@@ -40,11 +52,11 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
                 
         if(validate(e)) {
         
-            collect(e);
-            
-            IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), createRecordType());
+            IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
         
-            persist(ioRecord);
+            persistRecord(ioRecord);
+            
+            collect(e);
             
             notificationAgentChain.handle(ioRecord, this);
             
@@ -78,12 +90,18 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
      * 
      * @param io The record to be persisted.
      */
-    protected abstract void persist(IORecord io);
+    protected void persistRecord(IORecord io) {
+        try {
+
+            // Search the entity
+            this.entityDAO.get(io.getEntity());
+
+            // If found
+            this.ioDAO.save(io);
+
+        } catch(EntityNotFoundPersistedException | FailAtPersistingException e) {        
+            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
     
-    /**
-     * Create the right record type for IO records in this processor.
-     * 
-     * @return The IO record type.
-     */
-    protected abstract IORecordType createRecordType();
 }
