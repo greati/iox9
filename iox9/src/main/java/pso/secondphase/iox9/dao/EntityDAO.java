@@ -44,6 +44,6 @@ public interface EntityDAO {
      * @param e
      * @throws pso.secondphase.iox9.exception.EntityNotFoundPersistedException
      */
-    public void get(Entity e) throws EntityNotFoundPersistedException;
+    public void getByIdentifier(Entity e) throws EntityNotFoundPersistedException;
     
 }

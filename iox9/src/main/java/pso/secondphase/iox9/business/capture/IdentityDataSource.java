@@ -1,6 +1,7 @@
 package pso.secondphase.iox9.business.capture;
 
 import pso.secondphase.iox9.exception.FailedOpeningSourceException;
+import pso.secondphase.iox9.exception.InvalidDataReceivedException;
 
 /**
  * Represent a source of identity data along with the data capture method.
@@ -42,13 +43,13 @@ public abstract class IdentityDataSource<IdentityDataType> {
      * 
      * @return The data.
      */
-    public IdentityDataType getData() {
+    public IdentityDataType getData() throws InvalidDataReceivedException {
         if (this.ready)
             return _getData();
         return null;
     }
     
-    protected abstract IdentityDataType _getData();
+    protected abstract IdentityDataType _getData() throws InvalidDataReceivedException;
     
     /**
      * Set the source connection up for getting the data.

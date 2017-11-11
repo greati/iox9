@@ -95,7 +95,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable<Obser
         try {
 
             // Search the entity
-            this.entityDAO.get(io.getEntity());
+            this.entityDAO.getByIdentifier(io.getEntity());
 
             // If found
             this.ioDAO.save(io);

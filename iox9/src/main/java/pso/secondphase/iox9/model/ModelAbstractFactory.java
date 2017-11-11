@@ -12,10 +12,10 @@ import java.util.Date;
  * 
  * @author vitorgreati
  */
-public abstract class ModelAbstractFactory {
+public interface ModelAbstractFactory {
     
-    public abstract Entity createEntity(String identifier);
+    public Entity createEntity(String identifier);
     
-    public abstract IORecord createIORecord(Entity entity, Date instant, IORecordType type);
+    public IORecord createIORecord(Entity entity, Date instant, IORecordType type);
     
 }
