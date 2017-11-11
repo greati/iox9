@@ -24,7 +24,6 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader {
             
             Object data = yaml.load(input);
             
-            ApplicationConfiguration appConfig = new ApplicationConfiguration(); 
                         
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
