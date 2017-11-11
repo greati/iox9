@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.business.processing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public abstract class Observable<ObserverType extends Observer> {
     
-    private volatile List<ObserverType> observers;
+    private volatile List<ObserverType> observers = new ArrayList<>();
     
     /**
      * Register an observer.
