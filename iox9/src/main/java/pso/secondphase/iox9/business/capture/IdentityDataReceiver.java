@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.exception.FailedOpeningSourceException;
+import pso.secondphase.iox9.exception.InvalidDataReceivedException;
 import pso.secondphase.iox9.exception.InvalidEntityException;
 
 /**
@@ -40,9 +41,8 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
     @Override
     public void run() {
         while (isActive()) {
+                                
             try {
-                
-                IdentityDataType data = identityDataSource.getData();
                 
                 processor.process(identityDataSource.getData());
                 
@@ -52,9 +52,10 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
                     Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-            } catch (InvalidEntityException ex) {
+            } catch (InvalidDataReceivedException ex) {
                 Logger.getLogger(IdentityDataReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }
+                
         }
     }
     
