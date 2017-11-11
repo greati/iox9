@@ -14,6 +14,7 @@ import pso.secondphase.iox9.model.IORecord;
  * Updates some kind of statistics.
  * 
  * @author vitorgreati
+ * @param <StatisticsType>
  */
 public abstract class StatisticsProcessor<StatisticsType> extends Observable<Observer<StatisticsType, StatisticsProcessor>> {
     

@@ -5,19 +5,18 @@
  */
 package pso.secondphase.iox9.configuration;
 
-import java.util.HashMap;
-
 /**
+ * Interface for classes used to load the application parameters.
  * 
  * @author vitorgreati
  */
-public class Configuration {
-    
-    private HashMap<String, Object> receivers;
-    private HashMap<String, Object> sources;
-    
-    public void load(String location) {
-    
-    }
+public interface ConfigurationLoader {
+ 
+    /**
+     * Load the application parameters.
+     * 
+     * @param uri Where is the file located.
+     */
+    public void load(String uri);
     
 }
