@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pso.secondphase.iox9.configuration;
-
-import java.util.HashMap;
+package pso.secondphase.iox9.model;
 
 /**
- * 
+ *
  * @author vitorgreati
  */
-public class Configuration {
+public class Statistics {
     
-    private HashMap<String, Object> receivers;
-    private HashMap<String, Object> sources;
+    private final String name;
     
-    public void load(String location) {
+    public Statistics(String name) {
+        this.name = name;
+    }
     
+    public String getName() {
+        return this.name;
     }
     
 }
