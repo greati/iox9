@@ -5,6 +5,7 @@
  */
 package pso.secondphase.rapx9.control;
 
+import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.model.SimpleIORecordType;
@@ -23,10 +24,11 @@ public class MainControl {
     VehicleOutPanel outPanel = new VehicleOutPanel();
         
     // Processors
-    VehicleInProcessor inProcessor = 
-            new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory());
-    VehicleOutProcessor outProcessor = 
-            new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory());
+    //VehicleInProcessor inProcessor = 
+    //        new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
+    //        new OpenCVUFRNLicensePlateReconizer(), null, );
+    //VehicleOutProcessor outProcessor = 
+    //        new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory());
     
     // Create threads
     public static void main(String args[]) {
