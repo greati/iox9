@@ -9,7 +9,8 @@ import java.awt.Image;
 import java.util.Date;
 
 /**
- *
+ * Implements Vehicle model.
+ * 
  * @author vitorgreati
  */
 public class Vehicle extends Entity {
