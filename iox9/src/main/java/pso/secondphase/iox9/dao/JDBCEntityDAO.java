@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -27,9 +28,10 @@ public class JDBCEntityDAO implements EntityDAO {
         if (c == null || e == null)
             return;
         try {
-            String insertStmt = "INSERT INTO entity (identifier) VALUES (?);";
+            String insertStmt = "INSERT INTO entity (identifier, registration_date) VALUES (?, ?);";
             PreparedStatement stm = c.prepareStatement(insertStmt);
             stm.setString(1, e.getIdentifier());
+            stm.setDate(2, new java.sql.Date(new Date().getTime()));
             stm.executeUpdate();
             c.close(); 
         } catch (SQLException ex) {
@@ -48,11 +50,11 @@ public class JDBCEntityDAO implements EntityDAO {
     }
 
     @Override
-    public void getByIdentifier(Entity e) throws EntityNotFoundPersistedException {
+    public Entity getByIdentifier(String identifier) {
         
         Connection c = SimpleJDBCConnectionManager.getConnection();
         if (c == null)
-            return;
+            return null;
         try {
             StringBuilder query = new StringBuilder();
             query.append("SELECT * ");
@@ -60,17 +62,19 @@ public class JDBCEntityDAO implements EntityDAO {
             query.append("WHERE e.identifier = ?;");
             
             PreparedStatement stm = c.prepareStatement(query.toString());
-            stm.setString(1, e.getIdentifier());
+            stm.setString(1, identifier);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
+                Entity e = new Entity(identifier);
                 e.setIdentifier(rs.getString("identifier"));
                 e.setRegistrationDate(rs.getDate("registration_date"));
+                return e;
             }
             c.close();
         } catch (SQLException ex) {
             Logger.getLogger(JDBCEntityDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        return null;
     }
     
 }

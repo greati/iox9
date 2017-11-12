@@ -92,16 +92,15 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * @param io The record to be persisted.
      */
     protected void persistRecord(IORecord io) {
+        // Search the entity
+        Entity e = this.entityDAO.getByIdentifier(io.getEntity().getIdentifier());
+
         try {
-
-            // Search the entity
-            this.entityDAO.getByIdentifier(io.getEntity());
-
-            // If found
+            if (e == null)
+                entityDAO.save(e);
             this.ioDAO.save(io);
-
-        } catch(EntityNotFoundPersistedException | FailAtPersistingException e) {        
-            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, e);
+        } catch (FailAtPersistingException ex) {
+            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

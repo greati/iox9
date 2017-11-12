@@ -1,5 +1,8 @@
 ﻿CREATE USER iox9 WITH PASSWORD '123';
 
+GRANT ALL PRIVILEGES ON entity TO iox9;
+GRANT ALL PRIVILEGES ON io_record TO iox9;
+
 CREATE TABLE entity (
 	identifier VARCHAR(50) PRIMARY KEY,
 	registration_date DATE NOT NULL
@@ -12,3 +15,4 @@ CREATE TABLE io_record (
 	PRIMARY KEY (identifier_entity, instant),
 	FOREIGN KEY (identifier_entity) REFERENCES entity(identifier)
 );
+select * from entity;
