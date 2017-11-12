@@ -49,19 +49,21 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
         try {
             String identifier = this.entityRecognizer.recognize(identityData);
             
-            Entity e = this.modelAbstractFactory.createEntity(identifier);
-            
-            validate(e);
-        
-            IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
-        
-            persistRecord(ioRecord);
-            
-            collect(e);
-            
-            notificationAgentChain.handle(ioRecord, this);
-            
-            notifyObservers(ioRecord);
+            if (identifier != null) {
+                Entity e = this.modelAbstractFactory.createEntity(identifier);
+
+                validate(e);
+
+                IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
+
+                persistRecord(ioRecord);
+
+                collect(e);
+
+                notificationAgentChain.handle(ioRecord, this);
+
+                notifyObservers(ioRecord);
+            }
         } catch (InvalidEntityException ex) {
             Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -97,7 +99,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
 
         try {
             if (e == null)
-                entityDAO.save(e);
+                entityDAO.save(io.getEntity());
             this.ioDAO.save(io);
         } catch (FailAtPersistingException ex) {
             Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
