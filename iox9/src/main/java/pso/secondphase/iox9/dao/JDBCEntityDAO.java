@@ -24,7 +24,7 @@ public class JDBCEntityDAO implements EntityDAO {
     @Override
     public void save(Entity e) throws FailAtPersistingException {
         Connection c = SimpleJDBCConnectionManager.getConnection();
-        if (c == null)
+        if (c == null || e == null)
             return;
         try {
             String insertStmt = "INSERT INTO entity (identifier) VALUES (?);";
@@ -64,6 +64,7 @@ public class JDBCEntityDAO implements EntityDAO {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 e.setIdentifier(rs.getString("identifier"));
+                e.setRegistrationDate(rs.getDate("registration_date"));
             }
             c.close();
         } catch (SQLException ex) {
