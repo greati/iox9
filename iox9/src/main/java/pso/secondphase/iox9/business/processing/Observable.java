@@ -14,16 +14,16 @@ import java.util.List;
  * @author vitorgreati
  * @param <ObserverType>
  */
-public abstract class Observable<ObserverType extends Observer> {
+public abstract class Observable {
     
-    private volatile List<ObserverType> observers = new ArrayList<>();
+    private volatile List<Observer> observers = new ArrayList<>();
     
     /**
      * Register an observer.
      * 
      * @param o 
      */
-    public synchronized void addObserver(ObserverType o) {
+    public synchronized void addObserver(Observer o) {
         observers.add(o);
     }
     
@@ -32,7 +32,7 @@ public abstract class Observable<ObserverType extends Observer> {
      * 
      * @param o
      */
-    public synchronized void removeObserver(ObserverType o) {
+    public synchronized void removeObserver(Observer o) {
         observers.remove(o);
     }
     
@@ -42,10 +42,9 @@ public abstract class Observable<ObserverType extends Observer> {
      * @param object 
      */
     public void notifyObservers(Object object) {
-        observers.forEach((o) -> {
-            o.update(object, this);
+        observers.forEach((observer) -> {
+            observer.update(this, object);
         });
-    }
-    
+    }    
     
 }
