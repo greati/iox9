@@ -7,10 +7,7 @@ package pso.secondphase.iox9.business.notification;
 
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.business.processing.Observable;
-import pso.secondphase.iox9.business.processing.Observer;
-import pso.secondphase.iox9.business.processing.ObserverNotification;
 import pso.secondphase.iox9.model.IORecord;
-import pso.secondphase.iox9.model.Notification;
 
 /**
  * Start notification process and receive broadcast requests.

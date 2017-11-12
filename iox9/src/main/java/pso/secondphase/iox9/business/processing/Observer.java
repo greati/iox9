@@ -9,14 +9,13 @@ import java.util.logging.Logger;
  * Interface for classes interested in updates of an object of interest.
  * 
  * @author vitorgreati
- * @param <InterestType>
  */
 public abstract class Observer {
  
     /**
      * Called when an update must occur after a notification from the observable.
      * 
-     * @param entity
+     * @param object
      * @param observable 
      */
     public void update(Observable observable, Object object) {

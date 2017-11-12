@@ -42,6 +42,7 @@ public abstract class IdentityDataSource<IdentityDataType> {
      * Returns the data captured from the source.
      * 
      * @return The data.
+     * @throws pso.secondphase.iox9.exception.InvalidDataReceivedException
      */
     public IdentityDataType getData() throws InvalidDataReceivedException {
         if (this.ready)
