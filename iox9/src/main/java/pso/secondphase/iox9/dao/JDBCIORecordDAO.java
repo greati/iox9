@@ -7,10 +7,7 @@ package pso.secondphase.iox9.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
@@ -28,7 +25,7 @@ public class JDBCIORecordDAO implements IORecordDAO {
         if (c == null)
             return;
         try {
-            String sql = "INSERT INTO io_record (identifier, io_record_type, instant) VALUES (?,?,?)";
+            String sql = "INSERT INTO io_record (identifier, io_type, instant) VALUES (?,?,?)";
             PreparedStatement stm = c.prepareStatement(sql);
             stm.setString(1, io.getEntity().getIdentifier());
             stm.setLong(2, io.getType().getIORecordType());
@@ -38,7 +35,6 @@ public class JDBCIORecordDAO implements IORecordDAO {
         } catch (SQLException ex) {
             Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
     
 }

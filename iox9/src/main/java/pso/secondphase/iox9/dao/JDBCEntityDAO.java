@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -26,7 +24,7 @@ public class JDBCEntityDAO implements EntityDAO {
     @Override
     public void save(Entity e) throws FailAtPersistingException {
         Connection c = SimpleJDBCConnectionManager.getConnection();
-        if (c == null)
+        if (c == null || e == null)
             return;
         try {
             String insertStmt = "INSERT INTO entity (identifier) VALUES (?);";
@@ -66,6 +64,7 @@ public class JDBCEntityDAO implements EntityDAO {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 e.setIdentifier(rs.getString("identifier"));
+                e.setRegistrationDate(rs.getDate("registration_date"));
             }
             c.close();
         } catch (SQLException ex) {

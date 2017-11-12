@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.exception.FailedOpeningSourceException;
 import pso.secondphase.iox9.exception.InvalidDataReceivedException;
-import pso.secondphase.iox9.exception.InvalidEntityException;
 
 /**
  * Thread for getting raw identity data from identity data sources.
