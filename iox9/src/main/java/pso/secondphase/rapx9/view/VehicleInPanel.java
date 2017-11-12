@@ -17,11 +17,10 @@ import pso.secondphase.iox9.model.Vehicle;
  * 
  * @author vitorgreati
  */
-public class VehicleInPanel implements Observer<IORecord> {
+public class VehicleInPanel extends Observer {
 
-    @Override
-    public void update(IORecord ioRecord, Observable observable) {
-        System.out.print(ioRecord.getEntity().getIdentifier());
+    public void update(VehicleInProcessor observable, Object o) {
+        System.out.print(((IORecord)o).getEntity().getIdentifier());
     }
     
 }

@@ -7,6 +7,8 @@ package pso.secondphase.rapx9.view;
 
 import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
+import pso.secondphase.iox9.business.processing.VehicleInProcessor;
+import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.model.IORecord;
 
 /**
@@ -14,11 +16,10 @@ import pso.secondphase.iox9.model.IORecord;
  * 
  * @author vitorgreati
  */
-public class VehicleOutPanel implements Observer<IORecord> {
+public class VehicleOutPanel extends Observer {
 
-    @Override
-    public void update(IORecord ioRecord, Observable observable) {
-        System.out.print(ioRecord.getEntity().getIdentifier());
+    public void update(VehicleOutProcessor observable, Object o) {
+        System.out.print(((IORecord)o).getEntity().getIdentifier());
     }
     
 }
