@@ -19,7 +19,7 @@ import pso.secondphase.iox9.model.IORecord;
 public class VehicleOutPanel extends Observer {
 
     public void update(VehicleOutProcessor observable, Object o) {
-        System.out.print(((IORecord)o).getEntity().getIdentifier());
+        System.out.println("Saiu (POUT):"+((IORecord)o).getEntity().getIdentifier());
     }
     
 }
