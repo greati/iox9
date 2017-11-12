@@ -55,11 +55,12 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
         
             IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
         
-            persistRecord(ioRecord);
+            //persistRecord(ioRecord);
             
             collect(e);
-            
-            notificationAgentChain.handle(ioRecord, this);
+
+            if (notificationAgentChain != null)
+                notificationAgentChain.handle(ioRecord, this);
             
             notifyObservers(ioRecord);
         } catch (InvalidEntityException ex) {

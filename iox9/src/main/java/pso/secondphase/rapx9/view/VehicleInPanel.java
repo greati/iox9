@@ -9,6 +9,7 @@ import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.model.IORecord;
+import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.Vehicle;
 
 /**

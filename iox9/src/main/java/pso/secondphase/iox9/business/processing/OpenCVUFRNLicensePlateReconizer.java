@@ -18,6 +18,7 @@ import model.OpenCvAlpr;
 import model.PixelsKNNOCR;
 import model.PixelsOpticalCharRecognizer;
 import model.Plate;
+import nu.pattern.OpenCV;
 import static org.opencv.core.CvType.CV_8UC3;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -29,6 +30,9 @@ import org.opencv.objdetect.CascadeClassifier;
  */
 public class OpenCVUFRNLicensePlateReconizer implements EntityRecognizer<Image> {
     private OpenCvAlpr alpr;
+    
+    static{ OpenCV.loadLocally(); }
+
     
     public OpenCVUFRNLicensePlateReconizer() {
         Path currentRelativePath = Paths.get("");
