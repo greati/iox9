@@ -22,7 +22,7 @@ public abstract class Observer {
     public void update(Observable observable, Object object) {
         
         try {
-            Method update = getClass().getMethod("updadte", observable.getClass(), Object.class);
+            Method update = getClass().getMethod("update", observable.getClass(), Object.class);
             update.invoke(this, observable, object);
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Observer.class.getName()).log(Level.SEVERE, null, ex);
