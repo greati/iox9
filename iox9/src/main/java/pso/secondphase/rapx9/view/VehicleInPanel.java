@@ -8,6 +8,7 @@ package pso.secondphase.rapx9.view;
 import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
+import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.Vehicle;
@@ -21,7 +22,11 @@ import pso.secondphase.iox9.model.Vehicle;
 public class VehicleInPanel extends Observer {
 
     public void update(VehicleInProcessor observable, Object o) {
-        System.out.print(((IORecord)o).getEntity().getIdentifier());
+        System.out.println("Entrou (PIN): " + ((IORecord)o).getEntity().getIdentifier());
+    }
+    
+    public void update(VehicleOutProcessor observable, Object o) {
+        System.out.println("Saiu (PIN): " + ((IORecord)o).getEntity().getIdentifier());
     }
     
 }
