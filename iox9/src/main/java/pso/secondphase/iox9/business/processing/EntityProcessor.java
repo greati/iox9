@@ -49,19 +49,22 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
         try {
             String identifier = this.entityRecognizer.recognize(identityData);
             
-            Entity e = this.modelAbstractFactory.createEntity(identifier);
-            
-            validate(e);
-        
-            IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
-        
-            persistRecord(ioRecord);
-            
-            collect(e);
-            
-            notificationAgentChain.handle(ioRecord, this);
-            
-            notifyObservers(ioRecord);
+            if (identifier != null) {
+                Entity e = this.modelAbstractFactory.createEntity(identifier);
+
+                validate(e);
+
+                IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
+
+                persistRecord(ioRecord);
+
+                collect(e);
+
+                if (notificationAgentChain != null)
+                    notificationAgentChain.handle(ioRecord, this);
+
+                notifyObservers(ioRecord);
+            }
         } catch (InvalidEntityException ex) {
             Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,16 +95,15 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * @param io The record to be persisted.
      */
     protected void persistRecord(IORecord io) {
+        // Search the entity
+        Entity e = this.entityDAO.getByIdentifier(io.getEntity().getIdentifier());
+
         try {
-
-            // Search the entity
-            this.entityDAO.getByIdentifier(io.getEntity());
-
-            // If found
+            if (e == null)
+                entityDAO.save(io.getEntity());
             this.ioDAO.save(io);
-
-        } catch(EntityNotFoundPersistedException | FailAtPersistingException e) {        
-            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, e);
+        } catch (FailAtPersistingException ex) {
+            Logger.getLogger(EntityProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
