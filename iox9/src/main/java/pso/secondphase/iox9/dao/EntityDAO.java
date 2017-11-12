@@ -41,9 +41,10 @@ public interface EntityDAO {
     /**
      * Get an entity by its identity.
      * 
-     * @param e
+     * @param identifier
+     * @return 
      * @throws pso.secondphase.iox9.exception.EntityNotFoundPersistedException
      */
-    public void getByIdentifier(Entity e) throws EntityNotFoundPersistedException;
+    public Entity getByIdentifier(String identifier);
     
 }
