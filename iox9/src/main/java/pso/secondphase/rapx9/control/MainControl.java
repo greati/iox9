@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
 import pso.secondphase.iox9.business.capture.InDataSourceSavedImage;
+import pso.secondphase.iox9.business.capture.OutDataSourceSavedImage;
 import pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource;
 import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
@@ -40,15 +41,15 @@ public class MainControl {
                 new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 
-        VehicleInProcessor outProcessor = 
-                new VehicleInProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
+        VehicleOutProcessor outProcessor = 
+                new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 
         // Sources
         InMemoryVehicleDatabase database = new InMemoryVehicleDatabase();
         InDataSourceSavedImage inCameraDs = new InDataSourceSavedImage("entrance_camera", database);
-        InDataSourceSavedImage outCameraDs = new InDataSourceSavedImage("exit_camera", database);
+        OutDataSourceSavedImage outCameraDs = new OutDataSourceSavedImage("exit_camera", database);
 
         // Threads
         IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
@@ -56,6 +57,7 @@ public class MainControl {
         
         // Registrar views
         inProcessor.addObserver(inPanel);
+        outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
         
         // Start thread
