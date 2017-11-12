@@ -18,7 +18,7 @@ public class VehicleOutPanel implements Observer<IORecord> {
 
     @Override
     public void update(IORecord ioRecord, Observable observable) {
-        System.out.print(ioRecord.getEntity().getIdentifier());
+        System.out.println(ioRecord.getEntity().getIdentifier());
     }
     
 }

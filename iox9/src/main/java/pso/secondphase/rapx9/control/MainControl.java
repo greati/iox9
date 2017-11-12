@@ -5,6 +5,8 @@
  */
 package pso.secondphase.rapx9.control;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
 import pso.secondphase.iox9.business.capture.InDataSourceSavedImage;
 import pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource;
@@ -57,11 +59,18 @@ public class MainControl {
         outProcessor.addObserver(outPanel);
         
         // Start thread
-        inDataReceiver.start();
         inDataReceiver.setDaemon(true);
-        outDataReceiver.start();
+        inDataReceiver.start();
         outDataReceiver.setDaemon(true);
+        outDataReceiver.start();
 
+        while (true) 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
     }
     
 }

@@ -9,6 +9,7 @@ import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.model.IORecord;
+import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.Vehicle;
 
 /**
@@ -21,7 +22,7 @@ public class VehicleInPanel implements Observer<IORecord> {
 
     @Override
     public void update(IORecord ioRecord, Observable observable) {
-        System.out.print(ioRecord.getEntity().getIdentifier());
+        System.out.println(ioRecord.getEntity().getIdentifier());
     }
     
 }
