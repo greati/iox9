@@ -1,8 +1,6 @@
 package pso.secondphase.iox9.business.notification;
 
 import pso.secondphase.iox9.business.processing.EntityProcessor;
-import pso.secondphase.iox9.business.processing.Observable;
-import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 
@@ -34,6 +32,11 @@ public abstract class NotificationAgent {
             successor.handle(ioRecord, processor);
     }
     
+    /**
+     * Set the sucessor in the chain.
+     * 
+     * @param notificationAgentChain 
+     */
     public void setSucessor(NotificationAgent notificationAgentChain) {
         this.successor = notificationAgentChain;
     }
