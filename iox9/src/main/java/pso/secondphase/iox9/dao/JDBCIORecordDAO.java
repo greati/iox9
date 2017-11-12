@@ -25,7 +25,7 @@ public class JDBCIORecordDAO implements IORecordDAO {
         if (c == null)
             return;
         try {
-            String sql = "INSERT INTO io_record (identifier, io_type, instant) VALUES (?,?,?)";
+            String sql = "INSERT INTO io_record (identifier_entity, io_type, instant) VALUES (?,?,?)";
             PreparedStatement stm = c.prepareStatement(sql);
             stm.setString(1, io.getEntity().getIdentifier());
             stm.setLong(2, io.getType().getIORecordType());
