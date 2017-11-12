@@ -26,13 +26,14 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
     @Override
     protected boolean validate(Entity e) {
         // Check if the vehicle is there already. Must throw InvalidEntityException otherwise.
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     protected void collect(Entity e) {
         // Send to the thread of collect
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
