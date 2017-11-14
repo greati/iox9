@@ -13,6 +13,26 @@ package pso.secondphase.iox9.model;
 public class Notification {
     
     private String message;
+    private NotificationType type;
+    
+    public Notification(String message, NotificationType type) {
+        this.message = message;
+        this.type = type;
+    }
+    
+    /**
+     * @return the type
+     */
+    public NotificationType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
     
     public void setMessage(String message) {
         this.message = message;
