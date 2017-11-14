@@ -1,6 +1,7 @@
 package pso.secondphase.iox9.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Represents the entity to be identified and monitored.
@@ -13,6 +14,7 @@ public class Entity {
     
     private String identifier;
     private Date registrationDate;
+    private List<Attribute<?>> attrs;
     
     public Entity(String identifier) {
         this.identifier = identifier;
@@ -39,5 +41,18 @@ public class Entity {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
-    
+
+    /**
+     * @return the attrs
+     */
+    public List<Attribute<?>> getAttrs() {
+        return attrs;
+    }
+
+    /**
+     * @param attrs the attrs to set
+     */
+    public void setAttrs(List<Attribute<?>> attrs) {
+        this.attrs = attrs;
+    }    
 }
