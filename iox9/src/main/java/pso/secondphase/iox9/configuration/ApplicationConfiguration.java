@@ -20,6 +20,8 @@ public class ApplicationConfiguration {
     private Map<String, Object> receivers;
     private Map<String, Object> sources;
     
+    private Long entityCount = new Long(0);
+    
     private static ApplicationConfiguration instance;
     
     public static ApplicationConfiguration getInstance() {
@@ -29,12 +31,23 @@ public class ApplicationConfiguration {
     }    
     
     private ApplicationConfiguration() {
-        this.parameters = new HashMap<>();        
+        this.parameters = new HashMap<>();
+        this.parameters.put("maxCapacity", new Long(7));
     }
     
     public Map<String,Object> getParameters() {
         return this.parameters;
     }
     
-
+    public Long getEntityCount() {
+        return this.entityCount;
+    }
+    
+    public void incrementEntityCount() {
+        this.entityCount++;
+    }
+    
+    public void decrementEntityCount() {
+        this.entityCount--;
+    }
 }
