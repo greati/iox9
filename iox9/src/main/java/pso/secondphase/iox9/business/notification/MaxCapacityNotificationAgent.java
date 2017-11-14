@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.business.notification;
 
+import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 
@@ -13,7 +14,7 @@ import pso.secondphase.iox9.model.Notification;
  * @author vitorgreati
  */
 public class MaxCapacityNotificationAgent extends NotificationAgent {
-
+    
     public MaxCapacityNotificationAgent(NotificationAgent successor) {
         super(successor);
     }
@@ -24,7 +25,7 @@ public class MaxCapacityNotificationAgent extends NotificationAgent {
     }
 
     @Override
-    protected Notification action(IORecord ioRecord) {
+    protected Notification action(IORecord ioRecord, EntityProcessor processor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
