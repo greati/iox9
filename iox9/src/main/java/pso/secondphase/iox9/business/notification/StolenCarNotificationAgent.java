@@ -6,31 +6,30 @@
 package pso.secondphase.iox9.business.notification;
 
 import pso.secondphase.iox9.business.processing.EntityProcessor;
-import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.SimpleNotificationType;
+import pso.secondphase.iox9.model.Situation;
+import pso.secondphase.iox9.model.Vehicle;
 
 /**
  *
  * @author vitorgreati
  */
-public class MaxCapacityNotificationAgent extends NotificationAgent {
-    
-    public MaxCapacityNotificationAgent(NotificationAgent successor) {
+public class StolenCarNotificationAgent extends NotificationAgent {
+
+    public StolenCarNotificationAgent(NotificationAgent successor) {
         super(successor);
     }
 
     @Override
     protected boolean test(IORecord ioRecord, EntityProcessor processor) {
-        Object maxCapacity = ApplicationConfiguration.getInstance().getParameters().get("maxCapacity");
-        Long current = ApplicationConfiguration.getInstance().getEntityCount();
-        return (maxCapacity != null && current > ((Long) maxCapacity - 2));
+        return (((Vehicle)ioRecord.getEntity()).getSituation() == Situation.IRREGULAR);
     }
 
     @Override
     protected Notification createNotification() {
-        return new Notification("Maximum capacity almost reached!", SimpleNotificationType.WARNING);
+        return new Notification("Stolen car entered!", SimpleNotificationType.CAUTION);
     }
     
 }

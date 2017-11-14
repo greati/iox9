@@ -6,7 +6,6 @@
 package pso.secondphase.iox9.business.notification;
 
 import pso.secondphase.iox9.business.processing.EntityProcessor;
-import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.SimpleNotificationType;
@@ -15,22 +14,20 @@ import pso.secondphase.iox9.model.SimpleNotificationType;
  *
  * @author vitorgreati
  */
-public class MaxCapacityNotificationAgent extends NotificationAgent {
-    
-    public MaxCapacityNotificationAgent(NotificationAgent successor) {
+public class DailyVisitorsGoalNotificationAgent extends NotificationAgent {
+
+    public DailyVisitorsGoalNotificationAgent(NotificationAgent successor) {
         super(successor);
     }
 
     @Override
     protected boolean test(IORecord ioRecord, EntityProcessor processor) {
-        Object maxCapacity = ApplicationConfiguration.getInstance().getParameters().get("maxCapacity");
-        Long current = ApplicationConfiguration.getInstance().getEntityCount();
-        return (maxCapacity != null && current > ((Long) maxCapacity - 2));
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     protected Notification createNotification() {
-        return new Notification("Maximum capacity almost reached!", SimpleNotificationType.WARNING);
+        return new Notification("Visitors goal achieved!", SimpleNotificationType.INFO);
     }
     
 }
