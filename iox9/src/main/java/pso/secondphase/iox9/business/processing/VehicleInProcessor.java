@@ -20,8 +20,8 @@ import pso.secondphase.iox9.model.ModelAbstractFactory;
  */
 public class VehicleInProcessor extends EntityProcessor<Image> {
 
-    public VehicleInProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer, NotificationAgent notificationAgentChain, EntityDAO entityDAO, IORecordDAO ioDAO) {
-        super(ioType, modelAbstractFactory, entityRecognizer, notificationAgentChain, entityDAO, ioDAO);
+    public VehicleInProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer, EntityDAO entityDAO, IORecordDAO ioDAO) {
+        super(ioType, modelAbstractFactory, entityRecognizer, entityDAO, ioDAO);
     }
 
     @Override

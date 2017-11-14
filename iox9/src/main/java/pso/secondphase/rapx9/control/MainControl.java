@@ -39,12 +39,12 @@ public class MainControl {
         // Processors
         VehicleInProcessor inProcessor = 
                 new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
-                new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
+                new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 
         VehicleOutProcessor outProcessor = 
                 new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
-                new OpenCVUFRNLicensePlateReconizer(), null, new JDBCEntityDAO(),
+                new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 
         // Sources
