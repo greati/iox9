@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,6 +16,10 @@ import java.util.Map;
  */
 public class ApplicationConfiguration {
     
+    private final Map<String, Object> parameters;
+    private Map<String, Object> receivers;
+    private Map<String, Object> sources;
+    
     private static ApplicationConfiguration instance;
     
     public static ApplicationConfiguration getInstance() {
@@ -23,7 +28,13 @@ public class ApplicationConfiguration {
         return instance;
     }    
     
-    private Map<String, Object> parameters;
-    private Map<String, Object> receivers;
-    private Map<String, Object> sources;
+    private ApplicationConfiguration() {
+        this.parameters = new HashMap<>();        
+    }
+    
+    public Map<String,Object> getParameters() {
+        return this.parameters;
+    }
+    
+
 }

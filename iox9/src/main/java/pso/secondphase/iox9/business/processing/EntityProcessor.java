@@ -60,7 +60,8 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
 
                 collect(e);
 
-                notificationAgentChain.handle(ioRecord, this);
+                if (notificationAgentChain != null)
+                    notificationAgentChain.handle(ioRecord, this);
 
                 notifyObservers(ioRecord);
             }
