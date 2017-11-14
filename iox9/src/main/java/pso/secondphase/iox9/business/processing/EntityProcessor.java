@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -29,16 +30,14 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
     
     private final ModelAbstractFactory modelAbstractFactory;
     private final EntityRecognizer entityRecognizer;
-    private final NotificationAgent notificationAgentChain;
     protected final EntityDAO entityDAO;
     protected final IORecordDAO ioDAO;
     private final IORecordType ioType;
     
-    public EntityProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer,
-            NotificationAgent notificationAgentChain, EntityDAO entityDAO, IORecordDAO ioDAO) {
+    public EntityProcessor(IORecordType ioType, ModelAbstractFactory modelAbstractFactory, EntityRecognizer entityRecognizer, 
+            EntityDAO entityDAO, IORecordDAO ioDAO) {
         this.modelAbstractFactory = modelAbstractFactory;
         this.entityRecognizer = entityRecognizer;
-        this.notificationAgentChain = notificationAgentChain;
         this.entityDAO = entityDAO;
         this.ioDAO = ioDAO;
         this.ioType = ioType;
@@ -60,8 +59,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
 
                 collect(e);
 
-                if (notificationAgentChain != null)
-                    notificationAgentChain.handle(ioRecord, this);
+                NotifierChainSingleton.getInstance().notify(ioRecord, this);
 
                 notifyObservers(ioRecord);
             }
