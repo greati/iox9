@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
 import pso.secondphase.iox9.business.capture.InDataSourceSavedImage;
 import pso.secondphase.iox9.business.capture.OutDataSourceSavedImage;
+import pso.secondphase.iox9.business.notification.MaxCapacityNotificationAgent;
+import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
@@ -50,6 +52,12 @@ public class MainControl {
         InDataSourceSavedImage inCameraDs = new InDataSourceSavedImage("entrance_camera", database);
         OutDataSourceSavedImage outCameraDs = new OutDataSourceSavedImage("exit_camera", database);
 
+        // Notifiers
+        MaxCapacityNotificationAgent maxNot = new MaxCapacityNotificationAgent(null);
+        
+        // Set chain of notifiers
+        NotifierChainSingleton.getInstance().setNotifierHead(maxNot);
+        
         // Threads
         IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
         IdentityDataReceiver outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
@@ -58,6 +66,7 @@ public class MainControl {
         inProcessor.addObserver(inPanel);
         outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
+        NotifierChainSingleton.getInstance().addObserver(outPanel);
         
         // Start thread
         inDataReceiver.setDaemon(true);

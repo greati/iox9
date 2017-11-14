@@ -7,6 +7,7 @@ package pso.secondphase.iox9.business.processing;
 
 import java.awt.Image;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.Entity;
@@ -27,6 +28,7 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
     protected boolean validate(Entity e) {
         /* Check if that vehicle was inside. Must throw InvalidEntityException otherwise. */
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ApplicationConfiguration.getInstance().decrementEntityCount();
         return true;
     }
 

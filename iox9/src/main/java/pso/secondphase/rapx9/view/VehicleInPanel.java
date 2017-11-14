@@ -5,6 +5,7 @@
  */
 package pso.secondphase.rapx9.view;
 
+import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
@@ -29,4 +30,5 @@ public class VehicleInPanel extends Observer {
         System.out.println("Saiu (PIN): " + ((IORecord)o).getEntity().getIdentifier());
     }
     
+
 }
