@@ -6,6 +6,7 @@
 package pso.secondphase.iox9.business.notification;
 
 import pso.secondphase.iox9.business.processing.EntityProcessor;
+import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
 
@@ -20,8 +21,9 @@ public class MaxCapacityNotificationAgent extends NotificationAgent {
     }
 
     @Override
-    protected boolean test(IORecord ioRecord) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected boolean test(IORecord ioRecord, EntityProcessor processor) {
+        Object maxCapacity = ApplicationConfiguration.getInstance().getParameters().get("maxCapacity");
+        return (maxCapacity != null && (Long) maxCapacity > (Long) maxCapacity - 2);
     }
 
     @Override
