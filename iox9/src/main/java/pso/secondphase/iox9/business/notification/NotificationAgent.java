@@ -25,7 +25,7 @@ public abstract class NotificationAgent {
      */
     public void handle(IORecord ioRecord, EntityProcessor processor) {
         if (test(ioRecord, processor)) {
-            Notification not = action(ioRecord, processor);
+            Notification not = createNotification();
             NotifierChainSingleton.getInstance().notifyObservers(not);
         }
         if (successor != null)
@@ -53,10 +53,8 @@ public abstract class NotificationAgent {
     /**
      * Action based on the IORecord.
      * 
-     * @param ioRecord
-     * @param processor
      * @return 
      */
-    protected abstract Notification action(IORecord ioRecord, EntityProcessor processor);
+    protected abstract Notification createNotification();
     
 }
