@@ -24,9 +24,9 @@ public abstract class NotificationAgent {
      * @param processor The processor from which the IORecord came.
      */
     public void handle(IORecord ioRecord, EntityProcessor processor) {
-        if (test(ioRecord)) {
-            Notification not = action(ioRecord);
-            NotifierChainSingleton.getInstance().notify(ioRecord, processor);
+        if (test(ioRecord, processor)) {
+            Notification not = createNotification();
+            NotifierChainSingleton.getInstance().notifyObservers(not);
         }
         if (successor != null)
             successor.handle(ioRecord, processor);
@@ -45,16 +45,16 @@ public abstract class NotificationAgent {
      * Condition for throwing the notification.
      * 
      * @param ioRecord
+     * @param processor
      * @return 
      */
-    protected abstract boolean test(IORecord ioRecord);
+    protected abstract boolean test(IORecord ioRecord, EntityProcessor processor);
     
     /**
      * Action based on the IORecord.
      * 
-     * @param ioRecord
      * @return 
      */
-    protected abstract Notification action(IORecord ioRecord);
+    protected abstract Notification createNotification();
     
 }
