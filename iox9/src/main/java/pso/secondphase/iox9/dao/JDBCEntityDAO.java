@@ -20,6 +20,8 @@ import pso.secondphase.iox9.exception.FailAtPersistingException;
 import pso.secondphase.iox9.model.Attribute;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
+import pso.secondphase.iox9.model.IORecordType;
+import pso.secondphase.iox9.model.SimpleIORecordType;
 
 /**
  *
@@ -91,16 +93,15 @@ public class JDBCEntityDAO implements EntityDAO {
      */
     @Override
     public List<Entity> getByFilters(String id, Date initialDate, Date finalDate){
-      Connection c = SimpleJDBCConnectionManager.getConnection();
+        Connection c = SimpleJDBCConnectionManager.getConnection();
         if (c == null)
             return null;
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("SELECT DISTINCT e.*, sum(io.io_type) AS frequency ");
-            sb.append("FROM entity AS e, io_record AS io, io_record_type AS iot ");
+            sb.append("FROM entity AS e, io_record AS io ");
             sb.append("WHERE e.identifier = io.identifier_entity ");
-            sb.append("AND iot.id_io_record_type = io.io_type ");
-            sb.append("AND iot.name = 'in' ");
+            sb.append("AND io.io_type = ? ");
             
             if(id != null){
                 sb.append("AND e.identifier = ? ");
@@ -119,6 +120,9 @@ public class JDBCEntityDAO implements EntityDAO {
             PreparedStatement ps = c.prepareStatement(sb.toString());
             
             int i = 1;
+            
+            ps.setLong(i++, SimpleIORecordType.IN.getIORecordType());
+            
             if(id != null){
                 ps.setString(i++, id);
             }
@@ -163,6 +167,38 @@ public class JDBCEntityDAO implements EntityDAO {
             return entities;
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+
+    @Override
+    public Integer getNumberOfCars() {
+        Connection c = SimpleJDBCConnectionManager.getConnection();
+        if (c == null)
+            return null;        
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("SELECT DISTINCT ((SELECT COUNT(ir.io_type) FROM io_record ir WHERE ir.io_type = ?) -");
+            sb.append("(SELECT COUNT(ir.io_type) FROM io_record ir WHERE ir.io_type = ?)) AS inside_cars FROM io_record;");
+            
+            PreparedStatement ps = c.prepareStatement(sb.toString());
+            
+            ps.setLong(1, SimpleIORecordType.IN.getIORecordType());
+            ps.setLong(2, SimpleIORecordType.OUT.getIORecordType());
+            
+            ResultSet rs = ps.executeQuery();
+            Integer numberOfCars = 0;
+            
+            if(rs.next()){
+                numberOfCars = rs.getInt("inside_cars");
+            }
+            
+            c.close();
+            return numberOfCars;
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCEntityDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return null;

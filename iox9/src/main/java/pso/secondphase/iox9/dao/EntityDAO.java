@@ -57,4 +57,10 @@ public interface EntityDAO {
      * @return
      */
     public List<Entity> getByFilters(String id, Date initialDate, Date finalDate);
+    
+    /**
+     *
+     * @return
+     */
+    public Integer getNumberOfCars();
 }
