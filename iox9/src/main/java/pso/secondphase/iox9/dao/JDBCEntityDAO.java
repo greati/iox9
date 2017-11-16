@@ -8,13 +8,18 @@ package pso.secondphase.iox9.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
+import pso.secondphase.iox9.model.Attribute;
 import pso.secondphase.iox9.model.Entity;
+import pso.secondphase.iox9.model.IORecord;
 
 /**
  *
@@ -77,4 +82,89 @@ public class JDBCEntityDAO implements EntityDAO {
         return null;
     }
     
+    /**
+     *
+     * @param id
+     * @param initialDate
+     * @param finalDate
+     * @return
+     */
+    @Override
+    public List<Entity> getByFilters(String id, Date initialDate, Date finalDate){
+      Connection c = SimpleJDBCConnectionManager.getConnection();
+        if (c == null)
+            return null;
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT DISTINCT e.*, sum(io.io_type) AS frequency ");
+            sb.append("FROM entity AS e, io_record AS io, io_record_type AS iot ");
+            sb.append("WHERE e.identifier = io.identifier_entity ");
+            sb.append("AND iot.id_io_record_type = io.io_type ");
+            sb.append("AND iot.name = 'in' ");
+            
+            if(id != null){
+                sb.append("AND e.identifier = ? ");
+            }
+            
+            if(initialDate != null){
+                sb.append("AND e.registration_date >= ? ");
+            }
+            
+            if(finalDate != null){
+                sb.append("AND e.registration_date <= ? ");
+            }
+            
+            sb.append("GROUP BY e.identifier;");
+            
+            PreparedStatement ps = c.prepareStatement(sb.toString());
+            
+            int i = 1;
+            if(id != null){
+                ps.setString(i++, id);
+            }
+            
+            if(initialDate != null){
+                ps.setDate(i++, new java.sql.Date( initialDate.getTime() ));
+            }
+            
+            if(finalDate != null){
+                ps.setDate(i++, new java.sql.Date( finalDate.getTime() ));
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            
+            ResultSetMetaData rsmd;
+            List<Entity> entities = new ArrayList<>();
+            
+            while(rs.next()){
+                rsmd = rs.getMetaData();
+                Entity e = new Entity();
+                
+                for(i = 1; i <= rsmd.getColumnCount(); ++i){
+                    switch (rsmd.getColumnName(i)) {
+                        case "identifier":
+                            e.setIdentifier(rs.getString("identifier"));
+                            break;
+                        case "registration_date":
+                            e.setRegistrationDate(rs.getDate("registration_date"));
+                            break;
+                        default:    
+                            Class className = Class.forName( rsmd.getColumnClassName(i) );
+                            Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
+                            e.getAttrs().add(newAttr);
+                            break;
+                    }
+                }
+                
+                entities.add(e);
+            }                                  
+            c.close();
+            
+            return entities;
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
 }
