@@ -5,6 +5,8 @@
  */
 package pso.secondphase.iox9.dao;
 
+import java.util.Date;
+import java.util.List;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
 import pso.secondphase.iox9.model.Entity;
@@ -47,4 +49,12 @@ public interface EntityDAO {
      */
     public Entity getByIdentifier(String identifier);
     
+    /**
+     *
+     * @param id
+     * @param initialDate
+     * @param finalDate
+     * @return
+     */
+    public List<Entity> getByFilters(String id, Date initialDate, Date finalDate);
 }

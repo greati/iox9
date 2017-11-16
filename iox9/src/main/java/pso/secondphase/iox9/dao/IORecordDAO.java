@@ -23,8 +23,5 @@ public interface IORecordDAO {
      * @param io 
      * @throws pso.secondphase.iox9.exception.FailAtPersistingException 
      */
-    public void save(IORecord io) throws FailAtPersistingException;
-    
-    public List<IORecord> getIORecords(String id, Date initialDate, Date finalDate, Double frequency);
-        
+    public void save(IORecord io) throws FailAtPersistingException;        
 }

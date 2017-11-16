@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
@@ -39,20 +37,5 @@ public class JDBCIORecordDAO implements IORecordDAO {
         } catch (SQLException ex) {
             Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    public List<IORecord> getIORecords(String id, Date initialDate, Date finalDate, Double frequency) {
-        /*        
-        SELECT DISTINCT v.*, sum(io.id_io_record_type) AS frequency
-        FROM vehicle AS v, io_record AS io, io_record_type AS iot
-        WHERE v.id_vehicle = io.id_vehicle 
-        AND iot.id_io_record_type = io.id_io_record_type 
-        AND iot.name = 'in'
-        GROUP BY v.id_vehicle;
-        */
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }

@@ -1,5 +1,6 @@
 package pso.secondphase.iox9.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +17,17 @@ public class Entity {
     private Date registrationDate;
     private List<Attribute<?>> attrs;
     
+    public Entity(){
+        this.attrs = new ArrayList<>();
+    }
+    
     public Entity(String identifier) {
         this.identifier = identifier;
     }
     
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+        this.attrs = new ArrayList<>();
     }
     
     public String getIdentifier() {
