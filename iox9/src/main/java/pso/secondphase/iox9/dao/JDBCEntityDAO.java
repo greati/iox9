@@ -124,11 +124,11 @@ public class JDBCEntityDAO implements EntityDAO {
             }
             
             if(initialDate != null){
-                ps.setDate(i++, java.sql.Date.valueOf( initialDate.toString() ));
+                ps.setDate(i++, new java.sql.Date( initialDate.getTime() ));
             }
             
             if(finalDate != null){
-                ps.setDate(i, java.sql.Date.valueOf( finalDate.toString() ));
+                ps.setDate(i++, new java.sql.Date( finalDate.getTime() ));
             }
             
             ResultSet rs = ps.executeQuery();
