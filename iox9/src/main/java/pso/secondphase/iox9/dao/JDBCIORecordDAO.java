@@ -37,6 +37,5 @@ public class JDBCIORecordDAO implements IORecordDAO {
         } catch (SQLException ex) {
             Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
+    }    
 }
