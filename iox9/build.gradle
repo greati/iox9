@@ -38,8 +38,8 @@ dependencies {
     testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
     // compile jar files
     compile fileTree(dir: 'jar', include: ['*.jar'])
-    // https://mvnrepository.com/artifact/postgresql/postgresql
-    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
     // https://mvnrepository.com/artifact/org.openpnp/opencv
     compile group: 'org.openpnp', name: 'opencv', version: '3.2.0-1'
+    // https://mvnrepository.com/artifact/postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
 }
