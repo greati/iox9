@@ -53,7 +53,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
 
                 validate(e);
                 
-                populateSpecificValues(e);
+                populateSpecificValues(identityData, e);
 
                 IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
 
@@ -87,7 +87,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * 
      * @param e The Entity
      */
-    protected abstract void populateSpecificValues(Entity e);
+    protected abstract void populateSpecificValues(IdentityDataType identityData, Entity e);
     
     /**
      * Collect complementary data.
