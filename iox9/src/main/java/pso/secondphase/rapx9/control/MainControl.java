@@ -28,9 +28,70 @@ import pso.secondphase.rapx9.view.VehicleOutPanel;
  * @author vitorgreati
  */
 public class MainControl {
+    // Instantiate view classes
+    //private VehicleInPanel inPanel;
+    //private VehicleOutPanel outPanel;
     
+    // Processors
+    private VehicleInProcessor inProcessor;
+    private VehicleOutProcessor outProcessor;
+    
+    // Sources
+    private InMemoryVehicleDatabase database;
+    private InDataSourceSavedImage inCameraDs;
+    private OutDataSourceSavedImage outCameraDs;
+    
+    // Notifiers
+    MaxCapacityNotificationAgent maxNot;
 
-    // Create threads
+    // Threads
+    IdentityDataReceiver inDataReceiver;
+    IdentityDataReceiver outDataReceiver;
+    
+    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel){
+        //this.inPanel = inPanel;
+        //this.outPanel = outPanel;
+        
+        this.inProcessor = 
+                new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
+                new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
+                new JDBCIORecordDAO());
+        
+        this.outProcessor = 
+                new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
+                new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
+                new JDBCIORecordDAO());
+        
+        database = new InMemoryVehicleDatabase();
+        inCameraDs = new InDataSourceSavedImage("entrance_camera", database);
+        outCameraDs = new OutDataSourceSavedImage("exit_camera", database);
+        
+        maxNot = new MaxCapacityNotificationAgent(null);
+        
+        // Set chain of notifiers
+        NotifierChainSingleton.getInstance().setNotifierHead(maxNot);
+        
+        inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
+        outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
+        
+        // Registrar views
+        inProcessor.addObserver(inPanel);
+        outProcessor.addObserver(inPanel);
+        outProcessor.addObserver(outPanel);
+        NotifierChainSingleton.getInstance().addObserver(outPanel);
+        
+        run();
+    }
+    
+    private void run(){
+        // Start thread
+        inDataReceiver.setDaemon(true);
+        inDataReceiver.start();
+        outDataReceiver.setDaemon(true);
+        outDataReceiver.start();
+    }
+
+    /*// Create threads
     public static void main(String args[]) {
         // Instantiate view classes
         VehicleInPanel inPanel = new VehicleInPanel();
@@ -82,5 +143,5 @@ public class MainControl {
             }
         
     }
-    
+    */
 }
