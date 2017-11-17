@@ -5,9 +5,9 @@
  */
 package pso.secondphase.iox9.dao;
 
-import java.util.Date;
 import java.util.List;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
+import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
 
 /**
@@ -23,5 +23,12 @@ public interface IORecordDAO {
      * @param io 
      * @throws pso.secondphase.iox9.exception.FailAtPersistingException 
      */
-    public void save(IORecord io) throws FailAtPersistingException;        
+    public void save(IORecord io) throws FailAtPersistingException;
+    
+    /**
+     * Returns a list of records of a given entity.
+     * 
+     * @param e
+     */
+    public List<IORecord> listByEntity(Entity e);
 }
