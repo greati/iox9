@@ -37,5 +37,10 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
         // Send to the thread of collect
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    protected void populateSpecificValues(Entity e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
