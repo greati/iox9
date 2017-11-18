@@ -46,7 +46,11 @@ public class MainControl {
     
     // Notifiers
     MaxCapacityNotificationAgent maxNot;
-
+    
+    //Statistics
+    CountByHoursInDayStatistics countHours;
+    CountByWeekDaysStatistics countStat;
+    
     // Threads
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
@@ -77,11 +81,18 @@ public class MainControl {
         inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
         outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
         
+        countHours = new CountByHoursInDayStatistics(null);
+        countStat = new CountByWeekDaysStatistics(countHours);
+        
         // Registrar views
         inProcessor.addObserver(inPanel);
         outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
         NotifierChainSingleton.getInstance().addObserver(outPanel);
+              
+        countStat.addObserver(inPanel);
+        countHours.addObserver(inPanel);
+        StatisticsChainSingleton.getInstance().setStatisticsHead(countStat);
         
         run();
     }

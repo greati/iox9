@@ -244,16 +244,36 @@ public class VehicleInPanel extends Observer {
     }
     
     public void update(CountByWeekDaysStatistics observable, Object o) {
-        System.out.println("By week days:");
-        List<Integer> week = (ArrayList<Integer>) o;
-        for (Integer i : week)
-            System.out.println(i);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                List<Integer> week = (ArrayList<Integer>) o;
+                if(week.size() == 7){
+                    sundayValue.setText(String.valueOf(week.get(0)));
+                    mondayValue.setText(String.valueOf(week.get(1)));
+                    tuesdayValue.setText(String.valueOf(week.get(2)));
+                    wednesdayValue.setText(String.valueOf(week.get(3)));
+                    thursdayValue.setText(String.valueOf(week.get(4)));
+                    fridayValue.setText(String.valueOf(week.get(5)));
+                    saturdayValue.setText(String.valueOf(week.get(6)));
+                    
+                    Integer total = 0;
+                    for (Integer day : week){
+                        total += day;
+                    }
+                    
+                    totalWeekValue.setText(String.valueOf(total));
+                }
+                System.out.println("By week days:");
+            }
+        }); 
     }
     
     public void update(CountByHoursInDayStatistics observable, Object o) {
         System.out.println("By week days:");
-        List<Integer> week = (ArrayList<Integer>) o;
+        /*List<Integer> week = (ArrayList<Integer>) o;
         for (Integer i : week)
             System.out.println(i);
+        */
     }  
 }
