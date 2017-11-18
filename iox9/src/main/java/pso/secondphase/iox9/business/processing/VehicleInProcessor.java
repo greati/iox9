@@ -7,6 +7,7 @@ package pso.secondphase.iox9.business.processing;
 
 import java.awt.Image;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
@@ -35,6 +36,11 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
     @Override
     protected void collect(Entity e) {
         // Send to the thread of collect
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void populateSpecificValues(Image identityData, Entity e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

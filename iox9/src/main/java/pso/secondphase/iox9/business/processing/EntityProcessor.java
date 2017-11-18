@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
+import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -53,7 +54,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
 
                 validate(e);
                 
-                populateSpecificValues(e);
+                populateSpecificValues(identityData, e);
 
                 IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
 
@@ -62,6 +63,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 collect(e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);
+                StatisticsChainSingleton.getInstance().process(ioRecord);
 
                 notifyObservers(ioRecord);
             }
@@ -87,7 +89,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * 
      * @param e The Entity
      */
-    protected abstract void populateSpecificValues(Entity e);
+    protected abstract void populateSpecificValues(IdentityDataType identityData, Entity e);
     
     /**
      * Collect complementary data.
