@@ -224,10 +224,10 @@ public class VehicleInPanel extends Observer {
     public void updateSinesp(Entity v){
         // Panel IN
         plateIn.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
-        brandIn.setText("Marca: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
-        modelIn.setText("Modelo: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
-        colorIn.setText("Cor: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
-        valueIn.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : "")));
+        brandIn.setText("Marca: " + (v.getAttrs().get("brand") != null ? v.getAttrs().get("brand").value : ""));
+        modelIn.setText("Modelo: " + (v.getAttrs().get("model") != null ? v.getAttrs().get("model").value : ""));
+        colorIn.setText("Cor: " + (v.getAttrs().get("color") != null ? v.getAttrs().get("color").value : ""));
+        valueIn.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("value") != null ? v.getAttrs().get("value").value : 0.0)));
         situationIn.setText("Situação: ");
         if(v.getAttrs().get("image") != null) cameraIn.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
