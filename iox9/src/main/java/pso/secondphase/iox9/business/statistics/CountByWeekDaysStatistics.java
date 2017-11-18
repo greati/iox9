@@ -22,8 +22,12 @@ import pso.secondphase.iox9.model.SimpleIORecordType;
  */
 public class CountByWeekDaysStatistics extends StatisticsProcessor {
 
+    public CountByWeekDaysStatistics(StatisticsProcessor sucessor) {
+        super(sucessor);
+    }
+
     @Override
-    public void process(IORecord ioRecord) {
+    public Object generateStatistics(IORecord ioRecord) {
         IORecordDAO iodao = new JDBCIORecordDAO();
         
         List<IORecord> records = iodao.listByEntity(ioRecord.getEntity());
@@ -42,10 +46,10 @@ public class CountByWeekDaysStatistics extends StatisticsProcessor {
                 int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
                 week.set(dayOfWeek-1, week.get(dayOfWeek-1) + 1);
             }
-            
-            notifyObservers(week);
+
+            return week;
         }
-        
+        return null;
     }
     
 }
