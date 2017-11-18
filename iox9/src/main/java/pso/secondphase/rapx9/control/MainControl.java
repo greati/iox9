@@ -16,6 +16,7 @@ import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByWeekDaysStatistics;
+import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.JDBCEntityDAO;
 import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
@@ -60,8 +61,9 @@ public class MainControl {
         NotifierChainSingleton.getInstance().setNotifierHead(maxNot);
         
         // Statistics
-        CountByWeekDaysStatistics countStat = new CountByWeekDaysStatistics();
+        CountByWeekDaysStatistics countStat = new CountByWeekDaysStatistics(null);
         countStat.addObserver(inPanel);
+        StatisticsChainSingleton.getInstance().setStatisticsHead(countStat);
         
         // Threads
         IdentityDataReceiver inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
@@ -69,7 +71,6 @@ public class MainControl {
         
         // Registrar views
         inProcessor.addObserver(inPanel);
-        inProcessor.addObserver(countStat);
         outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
         NotifierChainSingleton.getInstance().addObserver(outPanel);
