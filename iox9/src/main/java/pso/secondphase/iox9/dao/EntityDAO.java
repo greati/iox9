@@ -63,4 +63,11 @@ public interface EntityDAO {
      * @return
      */
     public Integer getNumberOfCars();
+    
+    /**
+     * List all entities.
+     * 
+     * @return 
+     */
+    public List<Entity> list();
 }
