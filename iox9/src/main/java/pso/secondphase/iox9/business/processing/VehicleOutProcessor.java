@@ -10,6 +10,8 @@ import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.Attribute;
+import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
@@ -44,6 +46,4 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
         if(e.getIdentifier() != null)
             e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate"));
     }
-    
-    
 }

@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.business.notification.NotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
+import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -62,6 +63,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 collect(e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);
+                StatisticsChainSingleton.getInstance().process(ioRecord);
 
                 notifyObservers(ioRecord);
             }
