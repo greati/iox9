@@ -52,6 +52,8 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 Entity e = this.modelAbstractFactory.createEntity(identifier);
 
                 validate(e);
+                
+                populateSpecificValues(identityData, e);
 
                 IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
 
@@ -79,6 +81,13 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * @throws pso.secondphase.iox9.exception.InvalidEntityException
      */
     protected abstract boolean validate(Entity e) throws InvalidEntityException; 
+    
+    /**
+     * Method to store specific values.
+     * 
+     * @param e The Entity
+     */
+    protected abstract void populateSpecificValues(IdentityDataType identityData, Entity e);
     
     /**
      * Collect complementary data.

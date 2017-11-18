@@ -36,5 +36,10 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
     protected void collect(Entity e) {
         /* Empty */
     }
+
+    @Override
+    protected void populateSpecificValues(Image identityData, Entity e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
