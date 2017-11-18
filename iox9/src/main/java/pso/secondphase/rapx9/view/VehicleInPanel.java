@@ -12,6 +12,7 @@ import pso.secondphase.iox9.business.processing.Observable;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
+import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
 import pso.secondphase.iox9.business.statistics.CountByWeekDaysStatistics;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
@@ -34,6 +35,13 @@ public class VehicleInPanel extends Observer {
     }
     
     public void update(CountByWeekDaysStatistics observable, Object o) {
+        System.out.println("By week days:");
+        List<Integer> week = (ArrayList<Integer>) o;
+        for (Integer i : week)
+            System.out.println(i);
+    }
+    
+    public void update(CountByHoursInDayStatistics observable, Object o) {
         System.out.println("By week days:");
         List<Integer> week = (ArrayList<Integer>) o;
         for (Integer i : week)
