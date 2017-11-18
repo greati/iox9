@@ -203,4 +203,32 @@ public class JDBCEntityDAO implements EntityDAO {
         
         return null;
     }
+
+    @Override
+    public List<Entity> list() {
+        List<Entity> entityList = new ArrayList<>();
+        try {
+            Connection c = SimpleJDBCConnectionManager.getConnection();
+            
+            StringBuilder sql = new StringBuilder();
+            
+            sql.append("SELECT * FROM entity");
+            
+            PreparedStatement ps = c.prepareStatement(sql.toString());
+            
+            ResultSet rs = ps.executeQuery();
+            
+            
+            while (rs.next()) {
+                Entity e = new Entity();
+                e.setIdentifier(rs.getString("identifier"));
+                entityList.add(e);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCEntityDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return entityList;
+
+    }
 }
