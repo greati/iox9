@@ -27,6 +27,7 @@ import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.Vehicle;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.Observable;
+import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 
 /**
  * Simple example of a Vehicle Panel.
@@ -188,8 +189,8 @@ public class VehicleOutPanel extends Observer {
         if(v.getAttrs().get("image") != null) cameraOut.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
 
-    public void update(VehicleOutProcessor observable, Object o) {
-        System.out.println("Saiu (POUT):"+((IORecord)o).getEntity().getIdentifier());
+    public void update(VehicleInProcessor observable, Object o) {
+        System.out.println("Entrou (POUT):"+((IORecord)o).getEntity().getIdentifier());
     }
     
     public void update(NotifierChainSingleton notifier, Object o) {
