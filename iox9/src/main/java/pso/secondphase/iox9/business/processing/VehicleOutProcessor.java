@@ -6,10 +6,12 @@
 package pso.secondphase.iox9.business.processing;
 
 import java.awt.Image;
-import pso.secondphase.iox9.business.notification.NotificationAgent;
 import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
+import pso.secondphase.iox9.model.Attribute;
+import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
@@ -39,7 +41,9 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
 
     @Override
     protected void populateSpecificValues(Image identityData, Entity e) {
-        ///throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(identityData != null)
+            e.getAttrs().put("image", new Attribute<>( identityData, "image" ));
+        if(e.getIdentifier() != null)
+            e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate"));
     }
-    
 }
