@@ -22,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
+import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Vehicle;
 
@@ -212,23 +213,23 @@ public class VehicleInPanel extends Observer {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Vehicle v = ((Vehicle)((IORecord)o).getEntity());
-                updateSinesp(v);
+                Entity e = ((IORecord)o).getEntity();
+                updateSinesp(e);
                 System.out.println("Entrou (PIN): " + ((IORecord)o).getEntity().getIdentifier());
             }
         });        
         
     }
     
-    public void updateSinesp(Vehicle v){
+    public void updateSinesp(Entity v){
         // Panel IN
-        plateIn.setText("Placa: " + v.getPlate());
-        brandIn.setText("Marca: " + v.getBrand());
-        modelIn.setText("Modelo: " + v.getModel());
-        colorIn.setText("Cor: " + v.getColor());
-        valueIn.setText("Valor: R$ " + String.format("%.2f", v.getValue()));
+        plateIn.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        brandIn.setText("Marca: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        modelIn.setText("Modelo: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        colorIn.setText("Cor: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        valueIn.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : "")));
         situationIn.setText("Situação: ");
-        if(v.getImage() != null) cameraIn.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getImage(), null));
+        if(v.getAttrs().get("image") != null) cameraIn.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
     
     public void update(VehicleOutProcessor observable, Object o) {

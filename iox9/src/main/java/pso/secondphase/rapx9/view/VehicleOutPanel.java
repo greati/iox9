@@ -177,13 +177,13 @@ public class VehicleOutPanel extends Observer {
     
     public void updateSinesp(Vehicle v){
         // Panel IN
-        plateOut.setText("Placa: " + v.getPlate());
-        brandOut.setText("Marca: " + v.getBrand());
-        modelOut.setText("Modelo: " + v.getModel());
-        colorOut.setText("Cor: " + v.getColor());
-        valueOut.setText("Valor: R$ " + String.format("%.2f", v.getValue()));
+        plateOut.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        brandOut.setText("Marca: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        modelOut.setText("Modelo: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        colorOut.setText("Cor: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        valueOut.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : "")));
         situationOut.setText("Situação: ");
-        if(v.getImage() != null) cameraOut.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getImage(), null));
+        if(v.getAttrs().get("image") != null) cameraOut.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
     
     public void update(NotifierChainSingleton notifier, Object o) {
