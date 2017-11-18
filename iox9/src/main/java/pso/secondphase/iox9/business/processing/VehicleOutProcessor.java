@@ -13,6 +13,7 @@ import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
+import pso.secondphase.iox9.model.Vehicle;
 
 /**
  *
@@ -38,8 +39,14 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
     }
 
     @Override
-    protected void populateSpecificValues(Entity e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected void populateSpecificValues(Image identityData, Entity e) {
+        Vehicle vehicle = ((Vehicle)e);
+        vehicle.setRegistrationDate(e.getRegistrationDate());
+        vehicle.setAttrs(e.getAttrs());
+        
+        vehicle.setImage(identityData);
+        vehicle.setPlate(e.getIdentifier());
     }
+    
     
 }

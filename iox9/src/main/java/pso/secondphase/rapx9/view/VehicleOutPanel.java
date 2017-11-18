@@ -5,8 +5,11 @@
  */
 package pso.secondphase.rapx9.view;
 
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -21,6 +24,7 @@ import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.model.IORecord;
 import pso.secondphase.iox9.model.Notification;
+import pso.secondphase.iox9.model.Vehicle;
 
 /**
  * Simple example of a Vehicle Panel.
@@ -159,7 +163,27 @@ public class VehicleOutPanel extends Observer {
     }
     
     public void update(VehicleOutProcessor observable, Object o) {
-        System.out.println("Saiu (POUT):"+((IORecord)o).getEntity().getIdentifier());
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Vehicle v = ((Vehicle)((IORecord)o).getEntity());
+                updateSinesp(v);
+                System.out.println("Saiu (POUT):"+((IORecord)o).getEntity().getIdentifier());
+            }
+        });  
+        
+    }
+    
+    public void updateSinesp(Vehicle v){
+        // Panel IN
+        plateOut.setText("Placa: " + v.getPlate());
+        brandOut.setText("Marca: " + v.getBrand());
+        modelOut.setText("Modelo: " + v.getModel());
+        colorOut.setText("Cor: " + v.getColor());
+        valueOut.setText("Valor: R$ " + String.format("%.2f", v.getValue()));
+        situationOut.setText("Situação: ");
+        if(v.getImage() != null) cameraOut.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getImage(), null));
     }
     
     public void update(NotifierChainSingleton notifier, Object o) {
