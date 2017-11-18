@@ -5,6 +5,8 @@
  */
 package pso.secondphase.iox9.model;
 
+import java.util.Objects;
+
 /**
  * The simplest types of IO records, IN and OUT.
  * 
@@ -24,6 +26,15 @@ public enum SimpleIORecordType implements IORecordType {
     @Override
     public Long getIORecordType() {
         return this.ioRecordType;
+    }
+    
+    public static SimpleIORecordType getEnumEntry(Long value){
+        for(SimpleIORecordType e: SimpleIORecordType.values()) {
+          if(Objects.equals(value, e.getIORecordType())) {
+            return e;
+          }
+        }
+        return null;// not found
     }
     
 }
