@@ -25,6 +25,7 @@ public class Entity {
     
     public Entity(String identifier) {
         this.identifier = identifier;
+        this.attrs = new HashMap<>();
     }
     
     public void setIdentifier(String identifier) {
