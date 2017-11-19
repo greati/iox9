@@ -23,6 +23,7 @@ import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
 import pso.secondphase.iox9.model.VehicleFactory;
 import pso.secondphase.rapx9.util.InMemoryVehicleDatabase;
+import pso.secondphase.rapx9.view.GraphsPanel;
 import pso.secondphase.rapx9.view.VehicleInPanel;
 import pso.secondphase.rapx9.view.VehicleOutPanel;
 
@@ -55,7 +56,7 @@ public class MainControl {
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
     
-    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel){
+    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, GraphsPanel graphsPanel){
         //this.inPanel = inPanel;
         //this.outPanel = outPanel;
         
@@ -91,7 +92,9 @@ public class MainControl {
         NotifierChainSingleton.getInstance().addObserver(outPanel);
               
         countStat.addObserver(inPanel);
-        countHours.addObserver(inPanel);
+        countHours.addObserver(graphsPanel);
+        inProcessor.addObserver(graphsPanel);
+        outProcessor.addObserver(graphsPanel);
         StatisticsChainSingleton.getInstance().setStatisticsHead(countStat);
         
         run();
