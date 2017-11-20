@@ -59,17 +59,27 @@ public class JDBCEntityDAO implements EntityDAO {
             sql.append("UPDATE entity SET ");
             int fieldsCounter = 1;
             for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
-                sql.append(a.getValue().description + " = ? ");
-                if (fieldsCounter < e.getAttrs().size())
-                    sql.append(",");
-                ++fieldsCounter;
+                if (a.getValue().persistible) {
+                    if (fieldsCounter > 1)
+                        sql.append(",");
+                    sql.append(a.getValue().description + " = ? ");
+                    ++fieldsCounter;
+                }
             }
             sql.append(" WHERE identifier = ?");
+            System.out.println(sql.toString());
             
             // Prepare the statement
             PreparedStatement ps = c.prepareStatement(sql.toString());
+            
+            int i = 1;
             for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
-                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue().value);
+                if (a.getValue().persistible) {
+                    if (a.getValue().value instanceof Date)
+                        ps.setDate(i++, new java.sql.Date(((Date) a.getValue().value).getTime()));
+                    else
+                        ps.setObject(i++, a.getValue().value);
+                }
             }
             ps.setString(fieldsCounter, e.getIdentifier());
             
