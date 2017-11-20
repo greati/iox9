@@ -12,12 +12,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,6 +30,8 @@ import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
+import pso.secondphase.iox9.model.Entity;
+import pso.secondphase.iox9.model.IORecord;
 
 /**
  *
@@ -44,6 +50,12 @@ public class GraphsPanel extends Observer {
     private Date d;
     private Integer numberVehicles;
     
+    //Observable lists
+    ObservableList<Entity> vehicles;
+    
+    //ListViews
+    ListView<Entity> listViewVehicle;
+    
     public GraphsPanel(){
         
         numberVehicles = 0;
@@ -53,6 +65,9 @@ public class GraphsPanel extends Observer {
         
         //Initiate charts
         initCharts();
+        
+        //Initiate listViews
+        initListView();
     }
     
     public GridPane getPanel(){
@@ -139,9 +154,6 @@ public class GraphsPanel extends Observer {
                 countVehicles.getData().clear();
 
                 List<Integer> vehicleByHour = (ArrayList<Integer>) o;
-                for(Integer i: vehicleByHour){
-                    System.out.println(i);
-                }
                 
                 for(int i = 0; i < vehicleByHour.size(); ++i){
                     seriesCount.getData().add(new XYChart.Data(i, vehicleByHour.get(i)));
@@ -156,6 +168,17 @@ public class GraphsPanel extends Observer {
         Platform.runLater(() -> {
             numberVehicles++;
             parkingCount.setValue( numberVehicles );
+            
+            Entity e = ((IORecord)o).getEntity();
+            
+            if(vehicles.isEmpty() || e.getIdentifier().compareTo( vehicles.get(0).getIdentifier() ) != 0){
+                if(vehicles.size() == 4){
+                    vehicles.remove(3);
+                    vehicles.add(0, e);
+                }else{
+                    vehicles.add(0, e);
+                }
+            }
         });
     }
     
@@ -164,5 +187,58 @@ public class GraphsPanel extends Observer {
             if(numberVehicles > 0) numberVehicles--; 
             parkingCount.setValue( numberVehicles );
         });
+    }
+
+    public void initListView(){
+        // Last vehicles panel
+        vehicles = FXCollections.observableArrayList();
+        listViewVehicle = new ListView<>(vehicles);
+        listViewVehicle.getStyleClass().add("list-plates");
+                
+        Label l = new Label("Últimos Veículos");
+        l.getStyleClass().add("titles-information");
+        Rectangle bar = new Rectangle(200, 2);  
+        bar.setArcWidth(6);  
+        bar.setArcHeight(6);  
+        bar.setFill(Color.rgb(142,68,173));
+        
+        VBox vBox = new VBox(l, bar, listViewVehicle);  
+        vBox.setSpacing(1);  
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPadding(new Insets(10,10,0,10));
+        
+        listViewVehicle.setCellFactory((ListView<Entity> p) -> {
+            ListCell<Entity> cell = new ListCell<Entity>(){
+                @Override
+                protected void updateItem(Entity t, boolean bln) {
+                    super.updateItem(t, bln);
+                    if (t != null ) {
+                        setText(t.getIdentifier());
+                        if(t.getAttrs().get("situation") != null){
+                            if(((Boolean)t.getAttrs().get("situation").value)){
+                                getStyleClass().remove("ilegal");
+                                getStyleClass().remove("legal");
+                                getStyleClass().add("legal");
+                            }else{
+                                getStyleClass().remove("ilegal");
+                                getStyleClass().remove("legal");
+                                getStyleClass().add("ilegal");
+                            }
+                        }else{
+                            getStyleClass().remove("ilegal");
+                            getStyleClass().remove("legal");
+                            getStyleClass().add("legal");
+                        }
+                        
+                        
+                    } else {
+                        setText("");
+                    }
+                }
+            };
+            return cell;
+        });
+        
+        information.add(vBox, 1, 1);
     }
 }

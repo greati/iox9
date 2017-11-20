@@ -24,6 +24,7 @@ import pso.secondphase.iox9.model.SimpleIORecordType;
 import pso.secondphase.iox9.model.VehicleFactory;
 import pso.secondphase.rapx9.util.InMemoryVehicleDatabase;
 import pso.secondphase.rapx9.view.GraphsPanel;
+import pso.secondphase.rapx9.view.NotificationPanel;
 import pso.secondphase.rapx9.view.VehicleInPanel;
 import pso.secondphase.rapx9.view.VehicleOutPanel;
 
@@ -56,10 +57,8 @@ public class MainControl {
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
     
-    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, GraphsPanel graphsPanel){
-        //this.inPanel = inPanel;
-        //this.outPanel = outPanel;
-        
+    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, GraphsPanel graphsPanel, NotificationPanel notificationPanel){
+                
         this.inProcessor = 
                 new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
@@ -89,7 +88,7 @@ public class MainControl {
         inProcessor.addObserver(inPanel);
         outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
-        NotifierChainSingleton.getInstance().addObserver(outPanel);
+        NotifierChainSingleton.getInstance().addObserver(notificationPanel);
               
         countStat.addObserver(inPanel);
         countHours.addObserver(graphsPanel);

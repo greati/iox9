@@ -30,6 +30,7 @@ public class RealTimePanel extends Application{
     VehicleInPanel vehicleInPanel;
     VehicleOutPanel vehicleOutPanel;
     GraphsPanel graphsPanel;
+    NotificationPanel notificationPanel;
     
     //Control
     MainControl control;
@@ -40,6 +41,7 @@ public class RealTimePanel extends Application{
         vehicleInPanel = new VehicleInPanel();
         vehicleOutPanel = new VehicleOutPanel();
         graphsPanel = new GraphsPanel();
+        notificationPanel = new NotificationPanel();
         
         //Load font
         Font.loadFont(getClass().getResource("/font/JosefinSans-Light.ttf").toExternalForm(), 20);
@@ -62,7 +64,7 @@ public class RealTimePanel extends Application{
         //Displaying the contents of the stage 
         stage.show(); 
         
-        control = new MainControl(vehicleInPanel, vehicleOutPanel, graphsPanel);
+        control = new MainControl(vehicleInPanel, vehicleOutPanel, graphsPanel, notificationPanel);
     }
     
     /**
@@ -96,7 +98,7 @@ public class RealTimePanel extends Application{
         notification.getStyleClass().add("gridpane-notification");
         
         content.add(graphsPanel.getPanel(), 0, 0);
-        content.add(notification, 1, 0);
+        content.add(notificationPanel.getPanel(), 1, 0);
         
         //Setting content postion
         rootPane.add(content, 0, 1);
