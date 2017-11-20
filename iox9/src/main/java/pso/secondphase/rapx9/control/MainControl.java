@@ -70,7 +70,7 @@ public class MainControl {
                 
         // Start Information collector thread
         collector = new SinespInformationCollector();
-        InformationCollectorThread.getInstance(collector, new JDBCEntityDAO(), 3000).setDaemon(true);
+        InformationCollectorThread.getInstance(collector, new JDBCEntityDAO(), 30000).setDaemon(true);
         
         try {
             InformationCollectorThread.getInstance().start();

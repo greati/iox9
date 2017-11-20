@@ -48,8 +48,12 @@ public class SinespInformationCollector implements InformationCollector {
             Object obj = parser.parse(search);
             JSONObject jsonObj = (JSONObject) obj;            
             
+            if(((Long) jsonObj.get("returnCode"))== 1)
+                return;
+            
             String brand = ((String) jsonObj.get("brand")).split("/")[0];
             String model = ((String) jsonObj.get("brand")).split("/")[1];
+            
 
             if(brand.compareTo("I") == 0){
                 brand = model.split(" ", 2)[0];
