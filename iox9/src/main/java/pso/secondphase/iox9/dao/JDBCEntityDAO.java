@@ -69,7 +69,7 @@ public class JDBCEntityDAO implements EntityDAO {
             // Prepare the statement
             PreparedStatement ps = c.prepareStatement(sql.toString());
             for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
-                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue());
+                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue().value);
             }
             ps.setString(fieldsCounter, e.getIdentifier());
             
