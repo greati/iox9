@@ -54,7 +54,7 @@ public class InformationCollectorThread extends Thread {
         while(isActive()) {
             try {
                 if (!entitiesQueue.isEmpty()) {
-                    collector.collect(entitiesQueue.remove());
+                    collector.collect(getEntitiesQueue().remove());
                     Thread.sleep(getWaitingTime());
                 } 
                 Thread.sleep(1000);
@@ -90,6 +90,20 @@ public class InformationCollectorThread extends Thread {
      */
     public void setWaitingTime(long waitingTime) {
         this.waitingTime = waitingTime;
+    }
+
+    /**
+     * @return the entitiesQueue
+     */
+    public Queue<Entity> getEntitiesQueue() {
+        return entitiesQueue;
+    }
+
+    /**
+     * @param entitiesQueue the entitiesQueue to set
+     */
+    public void setEntitiesQueue(Queue<Entity> entitiesQueue) {
+        this.entitiesQueue = entitiesQueue;
     }
 
 }
