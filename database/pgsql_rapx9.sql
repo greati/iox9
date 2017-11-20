@@ -10,7 +10,7 @@ CREATE TABLE entity (
 	situation BOOLEAN,
 	yearModel INTEGER,
 	sinespDate TIMESTAMP,
-	price DECIMAL,
+	price DECIMAL DEFAULT 0,
 	fipeDate TIMESTAMP
 );
 

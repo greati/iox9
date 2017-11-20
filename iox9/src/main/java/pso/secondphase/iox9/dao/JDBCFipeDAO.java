@@ -83,7 +83,7 @@ public class JDBCFipeDAO {
             }
             
             obj.getAttrs().put("fipeDate", new Attribute<>(new Date(), "fipeDate"));
-            obj.getAttrs().put("price", new Attribute<Double>((Double) sum/count, "price"));
+            obj.getAttrs().put("price", new Attribute<Double>((Double) (count <= 0 ? 0 : sum/count), "price"));
             
             c.close();
         } catch (SQLException ex) {
