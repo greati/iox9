@@ -197,9 +197,14 @@ public class VehicleOutPanel extends Observer {
     public void updateTime(Entity e){
         if(e.getAttrs().get("instants") != null){
             List<Date> instants = (List)(e.getAttrs().get("instants").value);
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy - HH:mm");        
-            entrance.setText("Entrada: " + format.format(instants.get(0)));
-            exit.setText("Saída: " + format.format(instants.get(1)));
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+            if(instants.size() > 0){
+                entrance.setText("Entrada: " + format.format(instants.get(0)));
+                exit.setText("Saída: " + format.format(instants.get(1)));
+            }else{
+                entrance.setText("Entrada");
+                exit.setText("Saída");
+            }
         }
     }
     
