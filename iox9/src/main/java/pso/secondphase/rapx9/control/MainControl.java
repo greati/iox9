@@ -12,9 +12,9 @@ import pso.secondphase.iox9.business.capture.InDataSourceSavedImage;
 import pso.secondphase.iox9.business.capture.OutDataSourceSavedImage;
 import pso.secondphase.iox9.business.notification.MaxCapacityNotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
+import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.InformationCollector;
 import pso.secondphase.iox9.business.processing.InformationCollectorThread;
-import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
 import pso.secondphase.iox9.business.processing.SinespInformationCollector;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
@@ -106,7 +106,6 @@ public class MainControl {
         
         // Registrar views
         inProcessor.addObserver(inPanel);
-        outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
         NotifierChainSingleton.getInstance().addObserver(notificationPanel);
               
