@@ -12,7 +12,6 @@ CREATE TABLE io_record (
 	PRIMARY KEY (identifier_entity, instant),
 	FOREIGN KEY (identifier_entity) REFERENCES entity(identifier)
 );
-select * from entity;
 
 GRANT ALL PRIVILEGES ON entity TO iox9;
 GRANT ALL PRIVILEGES ON io_record TO iox9;
