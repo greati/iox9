@@ -59,9 +59,7 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 persistRecord(ioRecord);
 
                 collect(e);
-                
-                entityDAO.update(e);
-                
+                                
                 populateSpecificValues(identityData, e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);

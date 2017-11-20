@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.model.Entity;
 
 /**
@@ -27,6 +28,7 @@ public class InformationCollectorThread extends Thread {
     private boolean active;
     private long waitingTime;
     private final InformationCollector collector;
+    private final EntityDAO entityDAO;
 
     private static InformationCollectorThread instance;
     
@@ -36,16 +38,17 @@ public class InformationCollectorThread extends Thread {
         return instance;
     }
     
-    public static InformationCollectorThread getInstance(InformationCollector collector, long waitingTime) {
+    public static InformationCollectorThread getInstance(InformationCollector collector, EntityDAO entityDAO, long waitingTime) {
         if (instance == null)
-            instance = new InformationCollectorThread(collector, waitingTime);
+            instance = new InformationCollectorThread(collector, entityDAO, waitingTime);
         return instance;
     }
     
-    private InformationCollectorThread(InformationCollector collector, long waitingTime) {
+    private InformationCollectorThread(InformationCollector collector, EntityDAO entityDAO, long waitingTime) {
         this.entitiesQueue = new LinkedList<>();
         this.waitingTime = waitingTime;
         this.collector = collector;
+        this.entityDAO = entityDAO;
     }
     
     @Override
@@ -54,7 +57,9 @@ public class InformationCollectorThread extends Thread {
         while(isActive()) {
             try {
                 if (!entitiesQueue.isEmpty()) {
-                    collector.collect(getEntitiesQueue().remove());
+                    Entity e = getEntitiesQueue().remove();
+                    collector.collect(e);
+                    entityDAO.update(e);
                     Thread.sleep(getWaitingTime());
                 } 
                 Thread.sleep(1000);
