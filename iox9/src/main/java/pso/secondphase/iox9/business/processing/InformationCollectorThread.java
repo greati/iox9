@@ -26,19 +26,26 @@ public class InformationCollectorThread extends Thread {
     private volatile Queue<Entity> entitiesQueue;
     private boolean active;
     private long waitingTime;
-    private InformationCollector collector;
+    private final InformationCollector collector;
 
     private static InformationCollectorThread instance;
     
-    public static InformationCollectorThread getInstance(long waitingTime) {
+    public static InformationCollectorThread getInstance() throws Exception {
         if (instance == null)
-            instance = new InformationCollectorThread(waitingTime);
+            throw new Exception("This Singleton needs initialization parameters.");
         return instance;
     }
     
-    private InformationCollectorThread(long waitingTime) {
+    public static InformationCollectorThread getInstance(InformationCollector collector, long waitingTime) {
+        if (instance == null)
+            instance = new InformationCollectorThread(collector, waitingTime);
+        return instance;
+    }
+    
+    private InformationCollectorThread(InformationCollector collector, long waitingTime) {
         this.entitiesQueue = new LinkedList<>();
         this.waitingTime = waitingTime;
+        this.collector = collector;
     }
     
     @Override
