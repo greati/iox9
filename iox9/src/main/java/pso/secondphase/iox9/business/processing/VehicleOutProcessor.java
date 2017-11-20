@@ -42,11 +42,14 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
     }
 
     @Override
-    protected void populateSpecificValues(Image identityData, Entity e) {
+    protected void populateSpecificValues(Image identityData, Entity e) {        
+        if(e.getIdentifier() != null){
+            Entity newEntity = entityDAO.getByIdentifier(e.getIdentifier());
+            e.setAttrs( newEntity.getAttrs() );
+        }
+        
         if(identityData != null)
             e.getAttrs().put("image", new Attribute<>( identityData, "image" ));
-        if(e.getIdentifier() != null)
-            e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate"));
         
         List<Date> instants = ioDAO.getLastVisit(e);
         

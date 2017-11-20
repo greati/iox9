@@ -70,7 +70,7 @@ public class SinespInformationCollector implements InformationCollector {
             e.getAttrs().put("sinespDate", new Attribute<>(new Date(), "sinespDate"));
                         
             JDBCFipeDAO.getInstance().getPriceVehicle(e);
-            
+          
         } catch (NoSuchAlgorithmException | InvalidKeyException | IOException | JAXBException | ParseException ex) {
             Logger.getLogger(SinespInformationCollector.class.getName()).log(Level.SEVERE, null, ex);
         }    

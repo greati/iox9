@@ -14,8 +14,6 @@ CREATE TABLE entity (
 	fipeDate TIMESTAMP
 );
 
-SELECT * FROM entity
-
 CREATE TABLE io_record (
 	identifier_entity VARCHAR(50) NOT NULL,
 	instant TIMESTAMP NOT NULL,
