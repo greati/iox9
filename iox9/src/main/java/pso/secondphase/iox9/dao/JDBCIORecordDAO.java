@@ -95,7 +95,7 @@ public class JDBCIORecordDAO implements IORecordDAO {
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
-                instants.add( rs.getDate("instant") );
+                instants.add( rs.getTimestamp("instant") );
             }
             
             c.close();
