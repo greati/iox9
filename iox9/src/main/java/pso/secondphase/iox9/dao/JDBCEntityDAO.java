@@ -69,7 +69,7 @@ public class JDBCEntityDAO implements EntityDAO {
             // Prepare the statement
             PreparedStatement ps = c.prepareStatement(sql.toString());
             for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
-                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue());
+                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue().value);
             }
             ps.setString(fieldsCounter, e.getIdentifier());
             
@@ -185,8 +185,10 @@ public class JDBCEntityDAO implements EntityDAO {
                             break;
                         default:    
                             Class className = Class.forName( rsmd.getColumnClassName(i) );
-                            Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
-                            e.getAttrs().put(newAttr.description, newAttr);
+                            if(rs.getObject(i, className  ) != null){
+                                Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
+                                e.getAttrs().put(newAttr.description, newAttr);
+                            }
                             break;
                     }
                 }

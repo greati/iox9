@@ -18,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class SimpleJDBCConnectionManager {
     // JDBC driver name and database URL
-   static final String DB_URL = "jdbc:postgresql://localhost:5432/iox9db";
+   static final String DB_URL = "jdbc:postgresql://localhost:5432/rapx9db";
 
    //  Database credentials
-   static final String USER = "iox9";
+   static final String USER = "rapx9";
    static final String PASS = "123";
    
    public static Connection getConnection() {
