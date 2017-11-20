@@ -67,4 +67,42 @@ public class JDBCIORecordDAO implements IORecordDAO {
             Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;    }
+
+    @Override
+    public List<Date> getLastVisit(Entity e) {
+        Connection c = SimpleJDBCConnectionManager.getConnection();
+        if (c == null)
+            return null;
+        List<Date> instants = new ArrayList<>();
+        
+        try {
+            
+            StringBuilder query = new StringBuilder();
+            query.append("(SELECT instant FROM io_record WHERE identifier_entity = ? AND io_type = ? ORDER BY instant DESC LIMIT 1) ");
+            query.append("UNION (SELECT instant FROM io_record WHERE identifier_entity = ? AND io_type = ? ");
+            query.append("and instant < (SELECT instant FROM io_record WHERE identifier_entity = ? AND io_type = ? ORDER BY instant DESC LIMIT 1) ");
+            query.append("ORDER BY instant DESC LIMIT 1) ORDER BY instant;");
+            
+            PreparedStatement ps = c.prepareStatement(query.toString());
+            
+            ps.setString(1, e.getIdentifier());
+            ps.setLong(2, SimpleIORecordType.OUT.getIORecordType());
+            ps.setString(3, e.getIdentifier());
+            ps.setLong(4, SimpleIORecordType.IN.getIORecordType());
+            ps.setString(5, e.getIdentifier());
+            ps.setLong(6, SimpleIORecordType.OUT.getIORecordType());
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                instants.add( rs.getTimestamp("instant") );
+            }
+            
+            c.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCIORecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return instants;
+    }
 }
