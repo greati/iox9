@@ -230,7 +230,7 @@ public class VehicleInPanel extends Observer {
     
     public void updateSinesp(Entity v){
         // Panel IN
-        plateIn.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        plateIn.setText("Placa: " + v.getIdentifier());
         brandIn.setText("Marca: " + (v.getAttrs().get("brand") != null ? v.getAttrs().get("brand").value : ""));
         modelIn.setText("Modelo: " + (v.getAttrs().get("model") != null ? v.getAttrs().get("model").value : ""));
         colorIn.setText("Cor: " + (v.getAttrs().get("color") != null ? v.getAttrs().get("color").value : ""));
