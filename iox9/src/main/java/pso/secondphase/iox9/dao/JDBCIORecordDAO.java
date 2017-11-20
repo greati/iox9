@@ -85,10 +85,17 @@ public class JDBCIORecordDAO implements IORecordDAO {
             
             PreparedStatement ps = c.prepareStatement(query.toString());
             
+            ps.setString(1, e.getIdentifier());
+            ps.setLong(2, SimpleIORecordType.OUT.getIORecordType());
+            ps.setString(3, e.getIdentifier());
+            ps.setLong(4, SimpleIORecordType.IN.getIORecordType());
+            ps.setString(5, e.getIdentifier());
+            ps.setLong(6, SimpleIORecordType.OUT.getIORecordType());
+            
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
-                instants.add( rs.getDate("instant") );
+                instants.add( rs.getTimestamp("instant") );
             }
             
             c.close();

@@ -238,11 +238,6 @@ public class VehicleInPanel extends Observer {
         situationIn.setText("Situação: ");
         if(v.getAttrs().get("image") != null) cameraIn.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
-    
-    public void update(VehicleOutProcessor observable, Object o) {
-        System.out.println("Saiu (PIN): " + ((IORecord)o).getEntity().getIdentifier());
-    }
-    
     public void update(CountByWeekDaysStatistics observable, Object o) {
         Platform.runLater(new Runnable() {
             @Override

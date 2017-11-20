@@ -38,6 +38,8 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
 
     @Override
     protected void collect(Entity e) {
+        // Send to the thread of collect
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         try {
             InformationCollectorThread.getInstance().getEntitiesQueue().add(e);
         } catch (Exception ex) {
