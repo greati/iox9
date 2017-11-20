@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pso.secondphase.iox9.dao.JDBCFipeDAO;
 import pso.secondphase.iox9.model.Attribute;
 import pso.secondphase.iox9.model.Entity;
 import sinesp.SinespClient;
@@ -68,6 +69,8 @@ public class SinespInformationCollector implements InformationCollector {
             e.getAttrs().put("yearModel", new Attribute<>((long) jsonObj.get("yearModel"), "yearModel"));
             e.getAttrs().put("sinespDate", new Attribute<>(new Date(), "sinespDate"));
                         
+            JDBCFipeDAO.getInstance().getPriceVehicle(e);
+            
         } catch (NoSuchAlgorithmException | InvalidKeyException | IOException | JAXBException | ParseException ex) {
             Logger.getLogger(SinespInformationCollector.class.getName()).log(Level.SEVERE, null, ex);
         }    
