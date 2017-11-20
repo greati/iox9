@@ -12,7 +12,10 @@ import pso.secondphase.iox9.business.capture.InDataSourceSavedImage;
 import pso.secondphase.iox9.business.capture.OutDataSourceSavedImage;
 import pso.secondphase.iox9.business.notification.MaxCapacityNotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
+import pso.secondphase.iox9.business.processing.InformationCollector;
+import pso.secondphase.iox9.business.processing.InformationCollectorThread;
 import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
+import pso.secondphase.iox9.business.processing.SinespInformationCollector;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
@@ -57,8 +60,20 @@ public class MainControl {
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
     
+    // Information collector
+    InformationCollector collector;
+    
     public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, GraphsPanel graphsPanel, NotificationPanel notificationPanel){
                 
+        // Start Information collector thread
+        collector = new SinespInformationCollector();
+        InformationCollectorThread.getInstance(collector, 3000).setDaemon(true);
+        try {
+            InformationCollectorThread.getInstance().start();
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.inProcessor = 
                 new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
