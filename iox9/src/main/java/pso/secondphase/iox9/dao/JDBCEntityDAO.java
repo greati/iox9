@@ -111,15 +111,35 @@ public class JDBCEntityDAO implements EntityDAO {
             
             PreparedStatement stm = c.prepareStatement(query.toString());
             stm.setString(1, identifier);
+            
+            ResultSetMetaData rsmd;
+            
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Entity e = new Entity(identifier);
-                e.setIdentifier(rs.getString("identifier"));
-                e.setRegistrationDate(rs.getDate("registration_date"));
+                rsmd = rs.getMetaData();
+                Entity e = new Entity();
+                
+                for(int i = 1; i <= rsmd.getColumnCount(); ++i){
+                    switch (rsmd.getColumnName(i)) {
+                        case "identifier":
+                            e.setIdentifier(rs.getString("identifier"));
+                            break;
+                        case "registration_date":
+                            e.setRegistrationDate(rs.getDate("registration_date"));
+                            break;
+                        default:    
+                            Class className = Class.forName( rsmd.getColumnClassName(i) );
+                            if(rs.getObject(i, className  ) != null){
+                                Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
+                                e.getAttrs().put(newAttr.description, newAttr);
+                            }
+                            break;
+                    }
+                }
                 return e;
             }
             c.close();
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(JDBCEntityDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
