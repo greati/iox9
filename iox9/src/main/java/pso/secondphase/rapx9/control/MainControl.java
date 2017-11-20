@@ -17,13 +17,14 @@ import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
 import pso.secondphase.iox9.business.statistics.CountByWeekDaysStatistics;
+import pso.secondphase.iox9.business.statistics.PriceByHoursInDayStatistics;
 import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.JDBCEntityDAO;
 import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
 import pso.secondphase.iox9.model.VehicleFactory;
 import pso.secondphase.rapx9.util.InMemoryVehicleDatabase;
-import pso.secondphase.rapx9.view.GraphsPanel;
+import pso.secondphase.rapx9.view.ChartsPanel;
 import pso.secondphase.rapx9.view.NotificationPanel;
 import pso.secondphase.rapx9.view.VehicleInPanel;
 import pso.secondphase.rapx9.view.VehicleOutPanel;
@@ -52,12 +53,13 @@ public class MainControl {
     //Statistics
     CountByHoursInDayStatistics countHours;
     CountByWeekDaysStatistics countStat;
+    PriceByHoursInDayStatistics priceHours;
     
     // Threads
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
     
-    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, GraphsPanel graphsPanel, NotificationPanel notificationPanel){
+    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, ChartsPanel chartsPanel, NotificationPanel notificationPanel){
                 
         this.inProcessor = 
                 new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
@@ -81,8 +83,9 @@ public class MainControl {
         inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
         outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
         
-        countHours = new CountByHoursInDayStatistics(null);
-        countStat = new CountByWeekDaysStatistics(countHours);
+        priceHours = new PriceByHoursInDayStatistics(null);
+        countHours = new CountByHoursInDayStatistics(priceHours);
+        countStat = new CountByWeekDaysStatistics(countHours);        
         
         // Registrar views
         inProcessor.addObserver(inPanel);
@@ -91,9 +94,10 @@ public class MainControl {
         NotifierChainSingleton.getInstance().addObserver(notificationPanel);
               
         countStat.addObserver(inPanel);
-        countHours.addObserver(graphsPanel);
-        inProcessor.addObserver(graphsPanel);
-        outProcessor.addObserver(graphsPanel);
+        priceHours.addObserver(chartsPanel);
+        countHours.addObserver(chartsPanel);
+        inProcessor.addObserver(chartsPanel);
+        outProcessor.addObserver(chartsPanel);
         StatisticsChainSingleton.getInstance().setStatisticsHead(countStat);
         
         run();

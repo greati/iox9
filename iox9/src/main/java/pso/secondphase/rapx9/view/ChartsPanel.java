@@ -30,6 +30,7 @@ import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
+import pso.secondphase.iox9.business.statistics.PriceByHoursInDayStatistics;
 import pso.secondphase.iox9.model.Entity;
 import pso.secondphase.iox9.model.IORecord;
 
@@ -37,7 +38,7 @@ import pso.secondphase.iox9.model.IORecord;
  *
  * @author vinihcampos
  */
-public class GraphsPanel extends Observer {
+public class ChartsPanel extends Observer {
     
     //Grid 
     private GridPane information;
@@ -47,7 +48,8 @@ public class GraphsPanel extends Observer {
     private Gauge parkingCount;
     
     //Auxiliar variable
-    private Date d;
+    private volatile Date dateCount;
+    private volatile Date datePrice;
     private Integer numberVehicles;
     
     //Observable lists
@@ -56,7 +58,7 @@ public class GraphsPanel extends Observer {
     //ListViews
     ListView<Entity> listViewVehicle;
     
-    public GraphsPanel(){
+    public ChartsPanel(){
         
         numberVehicles = 0;
         
@@ -136,59 +138,6 @@ public class GraphsPanel extends Observer {
         information.add(vBox, 1, 0);
     }
     
-    public void update(CountByHoursInDayStatistics observable, Object o) {
-        Platform.runLater(() -> {
-                        
-            Calendar c1 = Calendar.getInstance();
-            Calendar c2 = Calendar.getInstance();
-            
-            if(d != null)
-                c1.setTime(d);            
-            
-            if(d == null || c1.get(Calendar.HOUR_OF_DAY) < c2.get(Calendar.HOUR_OF_DAY)){
-                d = new Date();
-                //Charts
-                XYChart.Series seriesCount = new XYChart.Series();
-                XYChart.Series seriesValues = new XYChart.Series();
-
-                countVehicles.getData().clear();
-
-                List<Integer> vehicleByHour = (ArrayList<Integer>) o;
-                
-                for(int i = 0; i < vehicleByHour.size(); ++i){
-                    seriesCount.getData().add(new XYChart.Data(i, vehicleByHour.get(i)));
-                }
-                
-                countVehicles.getData().add(seriesCount);
-            }
-        });
-    }
-
-    public void update(VehicleInProcessor observable, Object o) {
-        Platform.runLater(() -> {
-            numberVehicles++;
-            parkingCount.setValue( numberVehicles );
-            
-            Entity e = ((IORecord)o).getEntity();
-            
-            if(vehicles.isEmpty() || e.getIdentifier().compareTo( vehicles.get(0).getIdentifier() ) != 0){
-                if(vehicles.size() == 4){
-                    vehicles.remove(3);
-                    vehicles.add(0, e);
-                }else{
-                    vehicles.add(0, e);
-                }
-            }
-        });
-    }
-    
-    public void update(VehicleOutProcessor observable, Object o) {
-        Platform.runLater(() -> {
-            if(numberVehicles > 0) numberVehicles--; 
-            parkingCount.setValue( numberVehicles );
-        });
-    }
-
     public void initListView(){
         // Last vehicles panel
         vehicles = FXCollections.observableArrayList();
@@ -241,4 +190,87 @@ public class GraphsPanel extends Observer {
         
         information.add(vBox, 1, 1);
     }
+    
+    public void update(CountByHoursInDayStatistics observable, Object o) {
+        System.out.println("Entrou count!!");
+        Platform.runLater(() -> {
+                        
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            
+            if(dateCount != null)
+                c1.setTime(dateCount);            
+            
+            if(dateCount == null || c1.get(Calendar.HOUR_OF_DAY) < c2.get(Calendar.HOUR_OF_DAY)){
+                dateCount = new Date();
+                //Charts
+                XYChart.Series seriesCount = new XYChart.Series();
+                XYChart.Series seriesValues = new XYChart.Series();
+
+                countVehicles.getData().clear();
+
+                List<Integer> vehicleByHour = (ArrayList<Integer>) o;
+                
+                for(int i = 0; i < vehicleByHour.size(); ++i){
+                    seriesCount.getData().add(new XYChart.Data(i, vehicleByHour.get(i)));
+                }
+                
+                countVehicles.getData().add(seriesCount);
+            }
+        });
+    }
+    
+    public void update(PriceByHoursInDayStatistics observable, Object o) throws InterruptedException {
+        Platform.runLater(() -> {
+                        
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            
+            if(datePrice != null)
+                c1.setTime(datePrice);            
+            
+            if(datePrice == null || c1.get(Calendar.HOUR_OF_DAY) < c2.get(Calendar.HOUR_OF_DAY)){
+                datePrice = new Date();
+                //Charts
+                XYChart.Series seriesCount = new XYChart.Series();
+                XYChart.Series seriesValues = new XYChart.Series();
+
+                meanValueVehicles.getData().clear();
+
+                List<Double> meanPrice = (ArrayList<Double>) o;
+                for(int i = 0; i < meanPrice.size(); ++i){
+                    seriesCount.getData().add(new XYChart.Data(i, meanPrice.get(i)));
+                }
+                
+                meanValueVehicles.getData().add(seriesCount);
+            }
+        });
+    }
+
+    public void update(VehicleInProcessor observable, Object o) {
+        Platform.runLater(() -> {
+            numberVehicles++;
+            parkingCount.setValue( numberVehicles );
+            
+            Entity e = ((IORecord)o).getEntity();
+            
+            if(vehicles.isEmpty() || e.getIdentifier().compareTo( vehicles.get(0).getIdentifier() ) != 0){
+                if(vehicles.size() == 4){
+                    vehicles.remove(3);
+                    vehicles.add(0, e);
+                }else{
+                    vehicles.add(0, e);
+                }
+            }
+        });
+    }
+    
+    public void update(VehicleOutProcessor observable, Object o) {
+        Platform.runLater(() -> {
+            if(numberVehicles > 0) numberVehicles--; 
+            parkingCount.setValue( numberVehicles );
+        });
+    }
+
+    
 }
