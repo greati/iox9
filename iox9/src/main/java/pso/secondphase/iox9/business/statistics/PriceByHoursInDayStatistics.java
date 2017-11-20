@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.business.statistics;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -55,7 +56,7 @@ public class PriceByHoursInDayStatistics extends StatisticsProcessor {
                     hours.set(hour, hours.get(hour) + 1);
                     
                     if(v.getAttrs().get("price") != null)
-                        values.set(hour, values.get(hour) + ( (Double)v.getAttrs().get("price").value ));
+                        values.set(hour, values.get(hour) + ( (BigDecimal) v.getAttrs().get("price").value ).doubleValue());
                     else
                         values.set(hour, values.get(hour) + 0);
                 }                

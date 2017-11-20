@@ -184,7 +184,7 @@ public class VehicleOutPanel extends Observer {
     }
     
     public void updateSinesp(Entity v){
-        // Panel IN
+        // Panel OUT
         plateOut.setText("Placa: " + v.getIdentifier());
         brandOut.setText("Marca: " + (v.getAttrs().get("brand") != null ? v.getAttrs().get("brand").value : ""));
         modelOut.setText("Modelo: " + (v.getAttrs().get("model") != null ? v.getAttrs().get("model").value : ""));
