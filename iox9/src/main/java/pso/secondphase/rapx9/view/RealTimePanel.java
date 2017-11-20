@@ -29,7 +29,7 @@ public class RealTimePanel extends Application{
     //Panels
     VehicleInPanel vehicleInPanel;
     VehicleOutPanel vehicleOutPanel;
-    GraphsPanel graphsPanel;
+    ChartsPanel graphsPanel;
     NotificationPanel notificationPanel;
     
     //Control
@@ -40,7 +40,7 @@ public class RealTimePanel extends Application{
         
         vehicleInPanel = new VehicleInPanel();
         vehicleOutPanel = new VehicleOutPanel();
-        graphsPanel = new GraphsPanel();
+        graphsPanel = new ChartsPanel();
         notificationPanel = new NotificationPanel();
         
         //Load font
