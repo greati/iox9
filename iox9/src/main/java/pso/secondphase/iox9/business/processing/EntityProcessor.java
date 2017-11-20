@@ -58,6 +58,8 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 persistRecord(ioRecord);
 
                 collect(e);
+                                
+                populateSpecificValues(identityData, e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);
 
@@ -79,6 +81,13 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
      * @throws pso.secondphase.iox9.exception.InvalidEntityException
      */
     protected abstract boolean validate(Entity e) throws InvalidEntityException; 
+    
+    /**
+     * Method to store specific values.
+     * 
+     * @param e The Entity
+     */
+    protected abstract void populateSpecificValues(IdentityDataType identityData, Entity e);
     
     /**
      * Collect complementary data.
