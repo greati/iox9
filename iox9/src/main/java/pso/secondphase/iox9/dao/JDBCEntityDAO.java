@@ -185,8 +185,10 @@ public class JDBCEntityDAO implements EntityDAO {
                             break;
                         default:    
                             Class className = Class.forName( rsmd.getColumnClassName(i) );
-                            Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
-                            e.getAttrs().put(newAttr.description, newAttr);
+                            if(rs.getObject(i, className  ) != null){
+                                Attribute<?> newAttr = new Attribute<>( rs.getObject(i, className  ) , rsmd.getColumnName(i));
+                                e.getAttrs().put(newAttr.description, newAttr);
+                            }
                             break;
                     }
                 }
