@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pso.secondphase.iox9.exception.EntityNotFoundPersistedException;
@@ -48,7 +49,37 @@ public class JDBCEntityDAO implements EntityDAO {
 
     @Override
     public void update(Entity e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            Connection c = SimpleJDBCConnectionManager.getConnection();
+            
+            StringBuilder sql = new StringBuilder();
+            
+            // Compose the query string
+            sql.append("UPDATE entity SET ");
+            int fieldsCounter = 1;
+            for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
+                sql.append(a.getValue().description + " = ? ");
+                if (fieldsCounter < e.getAttrs().size())
+                    sql.append(",");
+                ++fieldsCounter;
+            }
+            sql.append(" WHERE identifier = ?");
+            
+            // Prepare the statement
+            PreparedStatement ps = c.prepareStatement(sql.toString());
+            for (Map.Entry<String, Attribute<?>> a : e.getAttrs().entrySet()) {
+                ps.setObject(fieldsCounter - e.getAttrs().size(), a.getValue());
+            }
+            ps.setString(fieldsCounter, e.getIdentifier());
+            
+            ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(JDBCEntityDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
     @Override
