@@ -51,8 +51,9 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
     protected void populateSpecificValues(Image identityData, Entity e) {
         if(identityData != null)
             e.getAttrs().put("image", new Attribute<>( identityData, "image", false));
-        if(e.getIdentifier() != null)
+        if(e.getIdentifier() != null){
             e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate", false));
+        }
     }
     
 }
