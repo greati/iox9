@@ -89,7 +89,6 @@ public class MainControl {
         
         // Registrar views
         inProcessor.addObserver(inPanel);
-        outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
         NotifierChainSingleton.getInstance().addObserver(notificationPanel);
               

@@ -207,11 +207,7 @@ public class VehicleOutPanel extends Observer {
             }
         }
     }
-    
-    public void update(VehicleInProcessor observable, Object o) {
-        System.out.println("Entrou (POUT):"+((IORecord)o).getEntity().getIdentifier());
-    }
-    
+        
     public void update(NotifierChainSingleton notifier, Object o) {
         System.out.println(((Notification)o).getMessage());
     }    
