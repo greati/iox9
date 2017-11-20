@@ -14,8 +14,8 @@ import java.util.Date;
  */
 public interface ModelAbstractFactory {
     
-    public Entity createEntity(String identifier);
+    public  Entity createEntity(String identifier);
     
-    public IORecord createIORecord(Entity entity, Date instant, IORecordType type);
-    
+    public  IORecord createIORecord(Entity entity, Date instant, IORecordType type);
+   
 }

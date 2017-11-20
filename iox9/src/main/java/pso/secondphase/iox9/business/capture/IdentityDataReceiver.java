@@ -39,8 +39,7 @@ public class IdentityDataReceiver<IdentityDataType> extends Thread {
         
     @Override
     public void run() {
-        while (isActive()) {
-                                
+        while (isActive()) {                  
             try {
                 
                 processor.process(identityDataSource.getData());

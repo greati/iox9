@@ -1,7 +1,4 @@
-﻿CREATE USER iox9 WITH PASSWORD '123';
-
-GRANT ALL PRIVILEGES ON entity TO iox9;
-GRANT ALL PRIVILEGES ON io_record TO iox9;
+CREATE USER iox9 WITH PASSWORD '123';
 
 CREATE TABLE entity (
 	identifier VARCHAR(50) PRIMARY KEY,
@@ -16,3 +13,6 @@ CREATE TABLE io_record (
 	FOREIGN KEY (identifier_entity) REFERENCES entity(identifier)
 );
 select * from entity;
+
+GRANT ALL PRIVILEGES ON entity TO iox9;
+GRANT ALL PRIVILEGES ON io_record TO iox9;
