@@ -5,6 +5,7 @@
  */
 package pso.secondphase.iox9.dao;
 
+import java.util.Date;
 import java.util.List;
 import pso.secondphase.iox9.exception.FailAtPersistingException;
 import pso.secondphase.iox9.model.Entity;
@@ -31,4 +32,12 @@ public interface IORecordDAO {
      * @param e
      */
     public List<IORecord> listByEntity(Entity e);
+    
+    /**
+     * Return the date and time of last visit of entity.
+     * 
+     * @param e
+     * @return
+     */
+    public List<Date> getLastVisit(Entity e);
 }
