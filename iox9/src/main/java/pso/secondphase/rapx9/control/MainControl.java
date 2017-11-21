@@ -13,16 +13,22 @@ import pso.secondphase.iox9.business.capture.OutDataSourceSavedImage;
 import pso.secondphase.iox9.business.notification.MaxCapacityNotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer;
+import pso.secondphase.iox9.business.processing.InformationCollector;
+import pso.secondphase.iox9.business.processing.InformationCollectorThread;
+import pso.secondphase.iox9.business.processing.SinespInformationCollector;
 import pso.secondphase.iox9.business.processing.VehicleInProcessor;
 import pso.secondphase.iox9.business.processing.VehicleOutProcessor;
 import pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics;
 import pso.secondphase.iox9.business.statistics.CountByWeekDaysStatistics;
+import pso.secondphase.iox9.business.statistics.PriceByHoursInDayStatistics;
 import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.JDBCEntityDAO;
 import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
 import pso.secondphase.iox9.model.VehicleFactory;
 import pso.secondphase.rapx9.util.InMemoryVehicleDatabase;
+import pso.secondphase.rapx9.view.ChartsPanel;
+import pso.secondphase.rapx9.view.NotificationPanel;
 import pso.secondphase.rapx9.view.VehicleInPanel;
 import pso.secondphase.rapx9.view.VehicleOutPanel;
 
@@ -46,14 +52,31 @@ public class MainControl {
     
     // Notifiers
     MaxCapacityNotificationAgent maxNot;
-
+    
+    //Statistics
+    CountByHoursInDayStatistics countHours;
+    CountByWeekDaysStatistics countStat;
+    PriceByHoursInDayStatistics priceHours;
+    
     // Threads
     IdentityDataReceiver inDataReceiver;
     IdentityDataReceiver outDataReceiver;
     
-    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel){
-        //this.inPanel = inPanel;
-        //this.outPanel = outPanel;
+    // Information collector
+    InformationCollector collector;
+    
+
+    public MainControl(VehicleInPanel inPanel, VehicleOutPanel outPanel, ChartsPanel chartsPanel, NotificationPanel notificationPanel){
+                
+        // Start Information collector thread
+        collector = new SinespInformationCollector();
+        InformationCollectorThread.getInstance(collector, new JDBCEntityDAO(), 30000).setDaemon(true);
+        
+        try {
+            InformationCollectorThread.getInstance().start();
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         this.inProcessor = 
                 new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
@@ -77,11 +100,21 @@ public class MainControl {
         inDataReceiver = new IdentityDataReceiver(inCameraDs, inProcessor, new Long(1000));
         outDataReceiver = new IdentityDataReceiver(outCameraDs, outProcessor, new Long(5000));
         
+        priceHours = new PriceByHoursInDayStatistics(null);
+        countHours = new CountByHoursInDayStatistics(priceHours);
+        countStat = new CountByWeekDaysStatistics(countHours);        
+        
         // Registrar views
         inProcessor.addObserver(inPanel);
-        outProcessor.addObserver(inPanel);
         outProcessor.addObserver(outPanel);
-        NotifierChainSingleton.getInstance().addObserver(outPanel);
+        NotifierChainSingleton.getInstance().addObserver(notificationPanel);
+              
+        countStat.addObserver(inPanel);
+        priceHours.addObserver(chartsPanel);
+        countHours.addObserver(chartsPanel);
+        inProcessor.addObserver(chartsPanel);
+        outProcessor.addObserver(chartsPanel);
+        StatisticsChainSingleton.getInstance().setStatisticsHead(countStat);
         
         run();
     }

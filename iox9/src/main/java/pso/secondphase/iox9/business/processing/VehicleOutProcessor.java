@@ -6,6 +6,8 @@
 package pso.secondphase.iox9.business.processing;
 
 import java.awt.Image;
+import java.util.Date;
+import java.util.List;
 import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
@@ -40,10 +42,17 @@ public class VehicleOutProcessor extends EntityProcessor<Image> {
     }
 
     @Override
-    protected void populateSpecificValues(Image identityData, Entity e) {
+    protected void populateSpecificValues(Image identityData, Entity e) {        
+        if(e.getIdentifier() != null){
+            Entity newEntity = entityDAO.getByIdentifier(e.getIdentifier());
+            e.setAttrs( newEntity.getAttrs() );
+        }
+        
         if(identityData != null)
             e.getAttrs().put("image", new Attribute<>( identityData, "image" ));
-        if(e.getIdentifier() != null)
-            e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate"));
+        
+        List<Date> instants = ioDAO.getLastVisit(e);
+        
+        e.getAttrs().put( "instants" , new Attribute<>(instants, "instants"));
     }
 }

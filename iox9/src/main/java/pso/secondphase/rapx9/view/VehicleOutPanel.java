@@ -8,6 +8,9 @@ package pso.secondphase.rapx9.view;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
@@ -27,6 +30,8 @@ import pso.secondphase.iox9.model.Notification;
 import pso.secondphase.iox9.model.Vehicle;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.Observable;
+import pso.secondphase.iox9.business.processing.VehicleInProcessor;
+import pso.secondphase.iox9.model.Entity;
 
 /**
  * Simple example of a Vehicle Panel.
@@ -169,25 +174,40 @@ public class VehicleOutPanel extends Observer {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Vehicle v = ((Vehicle)((IORecord)o).getEntity());
-                updateSinesp(v);
+                Entity e = ((Entity)((IORecord)o).getEntity());
+                updateSinesp(e);
+                updateTime(e);
                 System.out.println("Saiu (POUT):"+((IORecord)o).getEntity().getIdentifier());
             }
         });  
         
     }
     
-    public void updateSinesp(Vehicle v){
-        // Panel IN
-        plateOut.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+    public void updateSinesp(Entity v){
+        // Panel OUT
+        plateOut.setText("Placa: " + v.getIdentifier());
         brandOut.setText("Marca: " + (v.getAttrs().get("brand") != null ? v.getAttrs().get("brand").value : ""));
         modelOut.setText("Modelo: " + (v.getAttrs().get("model") != null ? v.getAttrs().get("model").value : ""));
         colorOut.setText("Cor: " + (v.getAttrs().get("color") != null ? v.getAttrs().get("color").value : ""));
-        valueOut.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("value") != null ? v.getAttrs().get("value").value : 0.0)));
-        situationOut.setText("Situação: ");
+        valueOut.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("price") != null ? v.getAttrs().get("price").value : 0.0)));
+        situationOut.setText("Situação: " + (v.getAttrs().get("situationCode") != null ? v.getAttrs().get("situationCode").value : ""));
         if(v.getAttrs().get("image") != null) cameraOut.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
     
+    public void updateTime(Entity e){
+        if(e.getAttrs().get("instants") != null){
+            List<Date> instants = (List)(e.getAttrs().get("instants").value);
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+            if(instants.size() > 0){
+                entrance.setText("Entrada: " + format.format(instants.get(0)));
+                exit.setText("Saída: " + format.format(instants.get(1)));
+            }else{
+                entrance.setText("Entrada");
+                exit.setText("Saída");
+            }
+        }
+    }
+        
     public void update(NotifierChainSingleton notifier, Object o) {
         System.out.println(((Notification)o).getMessage());
     }    

@@ -230,30 +230,45 @@ public class VehicleInPanel extends Observer {
     
     public void updateSinesp(Entity v){
         // Panel IN
-        plateIn.setText("Placa: " + (v.getAttrs().get("plate") != null ? v.getAttrs().get("plate").value : ""));
+        plateIn.setText("Placa: " + v.getIdentifier());
         brandIn.setText("Marca: " + (v.getAttrs().get("brand") != null ? v.getAttrs().get("brand").value : ""));
         modelIn.setText("Modelo: " + (v.getAttrs().get("model") != null ? v.getAttrs().get("model").value : ""));
         colorIn.setText("Cor: " + (v.getAttrs().get("color") != null ? v.getAttrs().get("color").value : ""));
-        valueIn.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("value") != null ? v.getAttrs().get("value").value : 0.0)));
-        situationIn.setText("Situação: ");
+        valueIn.setText("Valor: R$ " + String.format("%.2f", (v.getAttrs().get("price") != null ? v.getAttrs().get("price").value : 0.0)));
+        situationIn.setText("Situação: " + (v.getAttrs().get("situationCode") != null ? v.getAttrs().get("situationCode").value : ""));
         if(v.getAttrs().get("image") != null) cameraIn.setImage(SwingFXUtils.toFXImage((BufferedImage) v.getAttrs().get("image").value, null));
     }
-    
-    public void update(VehicleOutProcessor observable, Object o) {
-        System.out.println("Saiu (PIN): " + ((IORecord)o).getEntity().getIdentifier());
-    }
-    
     public void update(CountByWeekDaysStatistics observable, Object o) {
-        System.out.println("By week days:");
-        List<Integer> week = (ArrayList<Integer>) o;
-        for (Integer i : week)
-            System.out.println(i);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                List<Integer> week = (ArrayList<Integer>) o;
+                if(week.size() == 7){
+                    sundayValue.setText(String.valueOf(week.get(0)));
+                    mondayValue.setText(String.valueOf(week.get(1)));
+                    tuesdayValue.setText(String.valueOf(week.get(2)));
+                    wednesdayValue.setText(String.valueOf(week.get(3)));
+                    thursdayValue.setText(String.valueOf(week.get(4)));
+                    fridayValue.setText(String.valueOf(week.get(5)));
+                    saturdayValue.setText(String.valueOf(week.get(6)));
+                    
+                    Integer total = 0;
+                    for (Integer day : week){
+                        total += day;
+                    }
+                    
+                    totalWeekValue.setText(String.valueOf(total));
+                }
+                System.out.println("By week days:");
+            }
+        }); 
     }
     
     public void update(CountByHoursInDayStatistics observable, Object o) {
         System.out.println("By week days:");
-        List<Integer> week = (ArrayList<Integer>) o;
+        /*List<Integer> week = (ArrayList<Integer>) o;
         for (Integer i : week)
             System.out.println(i);
+        */
     }  
 }

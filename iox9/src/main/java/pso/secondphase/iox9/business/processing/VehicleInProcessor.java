@@ -6,6 +6,8 @@
 package pso.secondphase.iox9.business.processing;
 
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pso.secondphase.iox9.configuration.ApplicationConfiguration;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
@@ -38,14 +40,22 @@ public class VehicleInProcessor extends EntityProcessor<Image> {
     protected void collect(Entity e) {
         // Send to the thread of collect
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            InformationCollectorThread.getInstance().getEntitiesQueue().add(e);
+        } catch (Exception ex) {
+            Logger.getLogger(VehicleInProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
   
     @Override
     protected void populateSpecificValues(Image identityData, Entity e) {
+        if(e.getIdentifier() != null){
+            Entity newEntity = entityDAO.getByIdentifier(e.getIdentifier());
+            e.setAttrs( newEntity.getAttrs() );
+        }
+        
         if(identityData != null)
-            e.getAttrs().put("image", new Attribute<>( identityData, "image" ));
-        if(e.getIdentifier() != null)
-            e.getAttrs().put("plate", new Attribute<>(e.getIdentifier(), "plate"));
+            e.getAttrs().put("image", new Attribute<>( identityData, "image", false));
     }
     
 }
