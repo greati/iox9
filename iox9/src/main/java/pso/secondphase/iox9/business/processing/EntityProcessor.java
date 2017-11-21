@@ -52,14 +52,14 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 Entity e = this.modelAbstractFactory.createEntity(identifier);
 
                 validate(e);
-                
-                populateSpecificValues(identityData, e);
 
                 IORecord ioRecord = this.modelAbstractFactory.createIORecord(e, new Date(), this.ioType);
 
                 persistRecord(ioRecord);
 
                 collect(e);
+                                
+                populateSpecificValues(identityData, e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);
 

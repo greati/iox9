@@ -15,10 +15,19 @@ public class Attribute<T> {
     public T value;
     public Class type;
     public String description;
+    public Boolean persistible;
+    
+    public Attribute(T value, String description, Boolean persistible){
+        this.value = value;
+        this.type = value.getClass();
+        this.description = description;
+        this.persistible = persistible;
+    }
     
     public Attribute(T value, String description){
         this.value = value;
         this.type = value.getClass();
         this.description = description;
+        this.persistible = true;
     }    
 }

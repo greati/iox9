@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.model.Entity;
 
 /**
@@ -26,19 +27,28 @@ public class InformationCollectorThread extends Thread {
     private volatile Queue<Entity> entitiesQueue;
     private boolean active;
     private long waitingTime;
-    private InformationCollector collector;
+    private final InformationCollector collector;
+    private final EntityDAO entityDAO;
 
     private static InformationCollectorThread instance;
     
-    public static InformationCollectorThread getInstance(long waitingTime) {
+    public static InformationCollectorThread getInstance() throws Exception {
         if (instance == null)
-            instance = new InformationCollectorThread(waitingTime);
+            throw new Exception("This Singleton needs initialization parameters.");
         return instance;
     }
     
-    private InformationCollectorThread(long waitingTime) {
+    public static InformationCollectorThread getInstance(InformationCollector collector, EntityDAO entityDAO, long waitingTime) {
+        if (instance == null)
+            instance = new InformationCollectorThread(collector, entityDAO, waitingTime);
+        return instance;
+    }
+    
+    private InformationCollectorThread(InformationCollector collector, EntityDAO entityDAO, long waitingTime) {
         this.entitiesQueue = new LinkedList<>();
         this.waitingTime = waitingTime;
+        this.collector = collector;
+        this.entityDAO = entityDAO;
     }
     
     @Override
@@ -47,7 +57,9 @@ public class InformationCollectorThread extends Thread {
         while(isActive()) {
             try {
                 if (!entitiesQueue.isEmpty()) {
-                    collector.collect(entitiesQueue.remove());
+                    Entity e = getEntitiesQueue().remove();
+                    collector.collect(e);
+                    entityDAO.update(e);
                     Thread.sleep(getWaitingTime());
                 } 
                 Thread.sleep(1000);
@@ -83,6 +95,20 @@ public class InformationCollectorThread extends Thread {
      */
     public void setWaitingTime(long waitingTime) {
         this.waitingTime = waitingTime;
+    }
+
+    /**
+     * @return the entitiesQueue
+     */
+    public Queue<Entity> getEntitiesQueue() {
+        return entitiesQueue;
+    }
+
+    /**
+     * @param entitiesQueue the entitiesQueue to set
+     */
+    public void setEntitiesQueue(Queue<Entity> entitiesQueue) {
+        this.entitiesQueue = entitiesQueue;
     }
 
 }

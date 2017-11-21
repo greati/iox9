@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents the entity to be identified and monitored.
@@ -20,17 +21,16 @@ public class Entity {
     private Map<String, Attribute<?>> attrs;
     
     public Entity(){
-        this.attrs = new HashMap<>();
+        this.attrs = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
     
     public Entity(String identifier) {
         this.identifier = identifier;
-        this.attrs = new HashMap<>();
+        this.attrs = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
     
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-        this.setAttrs(new HashMap<>());
     }
     
     public String getIdentifier() {
