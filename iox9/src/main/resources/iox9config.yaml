@@ -63,7 +63,7 @@ views:
     -
         id: entrance_panel
         class: "PanelIn"
-        listen_notifications: true
+        notifiable: true
         publishers:
             - entrance_camera
     -
