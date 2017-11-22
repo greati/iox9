@@ -15,8 +15,13 @@ import java.util.logging.Logger;
 import org.yaml.snakeyaml.Yaml;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
 import pso.secondphase.iox9.business.capture.IdentityDataSource;
+import pso.secondphase.iox9.business.notification.NotificationAgent;
+import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.business.processing.EntityRecognizer;
+import pso.secondphase.iox9.business.processing.Observer;
+import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
+import pso.secondphase.iox9.business.statistics.StatisticsProcessor;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.IORecordType;
@@ -107,22 +112,61 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
             }
             
             // Statistics processors
+            StatisticsProcessor last = null;
             for (Object statistic : (List<?>)data.get("statictics_processors")) {
                 Map statisticProcessor = (Map) statistic;
-                System.out.println(statisticProcessor);
+                String id = (String) statisticProcessor.get("id");
+                String statClass = (String) statisticProcessor.get("class");
+                
+                try {
+                    StatisticsProcessor statisticsProcessor = (StatisticsProcessor) Class.forName(statClass)
+                            .getConstructor(StatisticsProcessor.class).newInstance(last);
+                    last = statisticsProcessor;
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | 
+                        IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+                    Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            StatisticsChainSingleton.getInstance().setStatisticsHead(last);
+            
+            // Notification processors
+            NotificationAgent lastNot = null;
+            for (Object view : (List<?>)data.get("notification_agents")) {
+                Map notificationDescription = (Map) view;
+                String id = (String) notificationDescription.get("id");
+                String notClass = (String) notificationDescription.get("class");
+                try {
+                    NotificationAgent notAgent = (NotificationAgent) Class.forName(notClass)
+                            .getConstructor(NotificationAgent.class).newInstance(lastNot);
+                    lastNot = notAgent;
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | 
+                        IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+                    Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            NotifierChainSingleton.getInstance().setNotifierHead(lastNot);
             
              // View processors
             for (Object view : (List<?>)data.get("views")) {
                 Map viewDescription = (Map) view;
-                System.out.println(view);
+                
+                String className = (String) viewDescription.get("class");
+                String id = (String) viewDescription.get("id");
+                Boolean notifiable = (Boolean) viewDescription.get("notifiable");
+                
+                try {
+                    Observer objView = (Observer) Class.forName(className).newInstance();
+                    
+                    if (notifiable)
+                        NotifierChainSingleton.getInstance().addObserver(objView);
+                    
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                    Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
             
-            // Notification processors
-            for (Object view : (List<?>)data.get("notification_agents")) {
-                Map notificationDescription = (Map) view;
-                System.out.println(notificationDescription);
-            }
+
             
             
         } catch (FileNotFoundException ex) {

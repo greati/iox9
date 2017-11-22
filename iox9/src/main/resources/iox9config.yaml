@@ -50,11 +50,20 @@ statictics_processors:
         id: length_of_stay
         class: "LenghtOfStay"
 
+notification_agents:
+    -
+        id: entrance_goal
+        class: "EntranceGoalNotificationAgent"
+    -
+        id: almost_full_alert
+        class: "AlmostFullNotificationAgent"
+
 # Views registration
 views:
     -
         id: entrance_panel
         class: "PanelIn"
+        listen_notifications: true
         publishers:
             - entrance_camera
     -
@@ -63,10 +72,4 @@ views:
         publishers:
             - exit_camera
 
-notification_agents:
-    -
-        id: entrance_goal
-        class: "EntranceGoalNotificationAgent"
-    -
-        id: almost_full_alert
-        class: "AlmostFullNotificationAgent"
+

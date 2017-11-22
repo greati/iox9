@@ -17,20 +17,6 @@ import pso.secondphase.iox9.business.capture.IdentityDataSource;
  */
 public class ApplicationConfiguration {
 
-    /**
-     * @return the sourceReceivers
-     */
-    public Map<String, Object> getSourceReceivers() {
-        return sourceReceivers;
-    }
-
-    /**
-     * @param sourceReceivers the sourceReceivers to set
-     */
-    public void setSourceReceivers(Map<String, Object> sourceReceivers) {
-        this.sourceReceivers = sourceReceivers;
-    }
-    
     private final Map<String, Object> parameters;
     private Map<String, Object> sourceReceivers;
     
@@ -63,5 +49,19 @@ public class ApplicationConfiguration {
     
     public void decrementEntityCount() {
         this.entityCount--;
+    }
+    
+    /**
+     * @return the sourceReceivers
+     */
+    public Map<String, Object> getSourceReceivers() {
+        return sourceReceivers;
+    }
+
+    /**
+     * @param sourceReceivers the sourceReceivers to set
+     */
+    public void setSourceReceivers(Map<String, Object> sourceReceivers) {
+        this.sourceReceivers = sourceReceivers;
     }
 }
