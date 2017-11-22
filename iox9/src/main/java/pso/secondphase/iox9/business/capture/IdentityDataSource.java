@@ -1,5 +1,7 @@
 package pso.secondphase.iox9.business.capture;
 
+import java.util.HashMap;
+import java.util.Map;
 import pso.secondphase.iox9.exception.FailedOpeningSourceException;
 import pso.secondphase.iox9.exception.InvalidDataReceivedException;
 
@@ -19,11 +21,13 @@ public abstract class IdentityDataSource<IdentityDataType> {
     protected final String id;
     protected boolean active;
     protected boolean ready;
+    private Map<String, Object> parameters;
 
     public IdentityDataSource(String id) {
         this.id = id;
         this.active = true;
         this.ready = false;
+        this.parameters = new HashMap<>();
     }
     
     public String getId() {
@@ -73,5 +77,19 @@ public abstract class IdentityDataSource<IdentityDataType> {
      * @throws pso.secondphase.iox9.exception.FailedOpeningSourceException
      */
     protected abstract void _setup() throws FailedOpeningSourceException;
+
+    /**
+     * @return the parameters
+     */
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
+
+    /**
+     * @param parameters the parameters to set
+     */
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
     
 }

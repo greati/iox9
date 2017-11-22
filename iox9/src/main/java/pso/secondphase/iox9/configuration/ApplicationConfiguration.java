@@ -7,6 +7,7 @@ package pso.secondphase.iox9.configuration;
 
 import java.util.HashMap;
 import java.util.Map;
+import pso.secondphase.iox9.business.capture.IdentityDataSource;
 
 /**
  * Contains the configuration and resources of
@@ -15,10 +16,23 @@ import java.util.Map;
  * @author vitorgreati
  */
 public class ApplicationConfiguration {
+
+    /**
+     * @return the sourceReceivers
+     */
+    public Map<String, Object> getSourceReceivers() {
+        return sourceReceivers;
+    }
+
+    /**
+     * @param sourceReceivers the sourceReceivers to set
+     */
+    public void setSourceReceivers(Map<String, Object> sourceReceivers) {
+        this.sourceReceivers = sourceReceivers;
+    }
     
     private final Map<String, Object> parameters;
-    private Map<String, Object> receivers;
-    private Map<String, Object> sources;
+    private Map<String, Object> sourceReceivers;
     
     private Long entityCount = new Long(0);
     

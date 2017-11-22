@@ -14,34 +14,41 @@
 capacity: 30 
 almost_full: 25
 
+entity_dao_class: "pso.secondphase.iox9.dao.JDBCEntityDAO"
+iorecord_dao_class: "pso.secondphase.iox9.dao.JDBCIORecordDAO"
+model_factory_class: "pso.secondphase.iox9.model.GeneralModelFactory"
+
 # Sources list
 sources:
     - 
         id: entrance_camera
-        source_class: "AddressCamera"
+        source_class: "pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource"
         processor_class: "InProcessor"
+        recognizer_class: "RecognizerClass"
+        io_type: 1
         active: true
+        sleep_time: 1000
         parameters:
             address: "192.168.7.7"
     -
         id: exit_camera
-        source_class: "AddressCamera"
+        source_class: "pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource"
         processor_class: "OutProcessor"
+        recognizer_class: "RecognizerClass"
+        io_type: 0
         active: true
+        sleep_time: 1000
         parameters:
-            address: "192.169.7.7"
+            address: "192.168.7.6"
 
 # Statistics processors registration
 statictics_processors:
     -
         id: weekly_statistics
-        sources:
-            - exit_camera
+        class: "WeeklyStatistics"
     -
         id: length_of_stay
-        sources:
-            - entrance_camera
-            - exit_camera
+        class: "LenghtOfStay"
 
 # Views registration
 views:
