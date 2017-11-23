@@ -64,8 +64,11 @@ views:
         id: entrance_panel
         class: "PanelIn"
         notifiable: true
-        publishers:
+        processors_of_interest:
             - entrance_camera
+        statistics_of_interest:
+            - weekly_statistics
+            
     -
         id: exit_panel
         class: "PanelOut"

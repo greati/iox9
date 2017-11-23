@@ -11,6 +11,8 @@ import pso.secondphase.iox9.model.IORecord;
  */
 public abstract class StatisticsProcessor extends Observable {
     
+    private String id;
+    
     private StatisticsProcessor sucessor;
     
     public StatisticsProcessor(StatisticsProcessor sucessor) {
@@ -36,5 +38,19 @@ public abstract class StatisticsProcessor extends Observable {
      * @return 
      */
     public abstract Object generateStatistics(IORecord ioRecord);
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
     
 }

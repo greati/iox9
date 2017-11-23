@@ -95,6 +95,8 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
                             .newInstance(ioType, modelFactoryClass.newInstance(), recognizer, 
                                     entityDaoClass.newInstance(), ioRecordDaoClass.newInstance());
                 
+                    ApplicationConfiguration.getInstance().getIdentityProcessors().put(sourceId, entityProcessor);
+                    
                     // Identity Receiver
                     Long sleepTime = (Long) sourceDescription.get("sleep_time");
                     
@@ -121,6 +123,11 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
                 try {
                     StatisticsProcessor statisticsProcessor = (StatisticsProcessor) Class.forName(statClass)
                             .getConstructor(StatisticsProcessor.class).newInstance(last);
+                    statisticsProcessor.setId(id);
+                    
+                    ApplicationConfiguration.getInstance().getStatisticsProcessors()
+                            .put(statisticsProcessor.getId(), statisticsProcessor);
+                    
                     last = statisticsProcessor;
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | 
                         IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
@@ -146,7 +153,7 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
             }
             NotifierChainSingleton.getInstance().setNotifierHead(lastNot);
             
-             // View processors
+             // Views
             for (Object view : (List<?>)data.get("views")) {
                 Map viewDescription = (Map) view;
                 
@@ -160,15 +167,26 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
                     if (notifiable)
                         NotifierChainSingleton.getInstance().addObserver(objView);
                     
+                    // Register as processors observer
+                    for (Object poi : (List<?>) viewDescription.get("processors_of_interest")) {
+                        String procId = (String) poi;
+                        ApplicationConfiguration.getInstance().getIdentityProcessors().get(procId)
+                                .addObserver(objView);
+                    }
+                    
+                    // Register as statistics observer
+                    for (Object stat : (List<?>) viewDescription.get("statistics_of_interest")) {
+                        String statId = (String) stat;
+                        ApplicationConfiguration.getInstance().getIdentityProcessors().get(statId)
+                            .addObserver(objView);
+                    }                                        
+                    
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                     Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
-            
 
-            
-            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
