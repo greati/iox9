@@ -29,7 +29,6 @@ import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
 import pso.secondphase.iox9.model.SimpleIORecordType;
-import pso.secondphase.rapx9.view.StartableView;
 
 /**
  * Load configuration from YAML file using the snakeyaml library.

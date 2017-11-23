@@ -11,7 +11,6 @@ import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.statistics.StatisticsProcessor;
-import pso.secondphase.rapx9.view.StartableView;
 
 /**
  * Contains the configuration and resources of
