@@ -17,7 +17,7 @@ import pso.secondphase.rapx9.control.MainControl;
  *
  * @author vinihcampos
  */
-public class RealTimePanel extends Application{
+public class RealTimePanel extends Application implements StartableView {
     
     static{ OpenCV.loadLocally(); }
     
@@ -102,6 +102,11 @@ public class RealTimePanel extends Application{
         
         //Setting content postion
         rootPane.add(content, 0, 1);
+    }
+
+    @Override
+    public void start() {
+        Application.launch("");
     }
     
 }

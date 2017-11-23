@@ -24,7 +24,7 @@ public class StolenCarNotificationAgent extends NotificationAgent {
 
     @Override
     protected boolean test(IORecord ioRecord, EntityProcessor processor) {
-        return (((Vehicle)ioRecord.getEntity()).getSituation() == Situation.IRREGULAR);
+        return false;//(((Vehicle)ioRecord.getEntity()).getSituation() == Situation.IRREGULAR);
     }
 
     @Override

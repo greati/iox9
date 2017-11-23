@@ -14,65 +14,72 @@
 capacity: 30 
 almost_full: 25
 
+# Important concrete classes
 entity_dao_class: "pso.secondphase.iox9.dao.JDBCEntityDAO"
 iorecord_dao_class: "pso.secondphase.iox9.dao.JDBCIORecordDAO"
 model_factory_class: "pso.secondphase.iox9.model.GeneralModelFactory"
 
+# Collecto configuration
+collector:
+    class: "pso.secondphase.iox9.business.processing.SinespInformationCollector"
+    sleep_time: 30000
+    
 # Sources list
 sources:
     - 
         id: entrance_camera
-        source_class: "pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource"
-        processor_class: "InProcessor"
-        recognizer_class: "RecognizerClass"
-        io_type: 1
-        active: true
-        sleep_time: 1000
-        parameters:
-            address: "192.168.7.7"
-    -
-        id: exit_camera
-        source_class: "pso.secondphase.iox9.business.capture.SarxosAddressCameraDataSource"
-        processor_class: "OutProcessor"
-        recognizer_class: "RecognizerClass"
+        source_class: "pso.secondphase.iox9.business.capture.InDataSourceSavedImage"
+        processor_class: "pso.secondphase.iox9.business.processing.VehicleInProcessor"
+        recognizer_class: "pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer"
         io_type: 0
         active: true
         sleep_time: 1000
-        parameters:
-            address: "192.168.7.6"
+    -
+        id: exit_camera
+        source_class: "pso.secondphase.iox9.business.capture.OutDataSourceSavedImage"
+        processor_class: "pso.secondphase.iox9.business.processing.VehicleOutProcessor"
+        recognizer_class: "pso.secondphase.iox9.business.processing.OpenCVUFRNLicensePlateReconizer"
+        io_type: 1
+        active: true
+        sleep_time: 5000
 
 # Statistics processors registration
 statictics_processors:
     -
-        id: weekly_statistics
-        class: "WeeklyStatistics"
+        id: count_by_hours_in_day
+        class: "pso.secondphase.iox9.business.statistics.CountByHoursInDayStatistics"
     -
-        id: length_of_stay
-        class: "LenghtOfStay"
+        id: count_by_week_days
+        class: "pso.secondphase.iox9.business.statistics.CountByWeekDaysStatistics"
+    -
+        id: price_by_hours_in_day
+        class: "pso.secondphase.iox9.business.statistics.PriceByHoursInDayStatistics"
 
 notification_agents:
     -
-        id: entrance_goal
-        class: "EntranceGoalNotificationAgent"
+        id: daily_visitors
+        class: "pso.secondphase.iox9.business.notification.DailyVisitorsGoalNotificationAgent"
     -
-        id: almost_full_alert
-        class: "AlmostFullNotificationAgent"
+        id: max_capacity
+        class: "pso.secondphase.iox9.business.notification.MaxCapacityNotificationAgent"
+    -
+        id: stolen_car
+        class: "pso.secondphase.iox9.business.notification.StolenCarNotificationAgent"
 
 # Views registration
 views:
     -
         id: entrance_panel
-        class: "PanelIn"
-        notifiable: true
+        class: "pso.secondphase.rapx9.view.VehicleInTest"
+        notifiable: false
         processors_of_interest:
             - entrance_camera
-        statistics_of_interest:
-            - weekly_statistics
-            
     -
         id: exit_panel
-        class: "PanelOut"
-        publishers:
+        class: "pso.secondphase.rapx9.view.VehicleOutTest"
+        notifiable: false
+        processors_of_interest:
             - exit_camera
 
-
+# Start class
+start_class: "pso.secondphase.rapx9.view.RealTimePanel"

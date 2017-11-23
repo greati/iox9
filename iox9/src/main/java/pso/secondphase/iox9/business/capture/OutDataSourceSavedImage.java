@@ -24,6 +24,11 @@ public class OutDataSourceSavedImage extends IdentityDataSource<Image> {
     
     private final InMemoryVehicleDatabase database;
     
+    public OutDataSourceSavedImage(String id) {
+        super(id);
+        this.database = InMemoryVehicleDatabase.getInstance();
+    }
+    
     public OutDataSourceSavedImage(String id, InMemoryVehicleDatabase database){
         super(id);
         this.database = database;
