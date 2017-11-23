@@ -27,14 +27,14 @@ public class InformationCollectorThread extends Thread {
     private volatile Queue<Entity> entitiesQueue;
     private boolean active;
     private long waitingTime;
-    private final InformationCollector collector;
-    private final EntityDAO entityDAO;
+    private InformationCollector collector;
+    private EntityDAO entityDAO;
 
     private static InformationCollectorThread instance;
     
-    public static InformationCollectorThread getInstance() throws Exception {
+    public static InformationCollectorThread getInstance() {
         if (instance == null)
-            throw new Exception("This Singleton needs initialization parameters.");
+            instance = new InformationCollectorThread();
         return instance;
     }
     
@@ -42,6 +42,10 @@ public class InformationCollectorThread extends Thread {
         if (instance == null)
             instance = new InformationCollectorThread(collector, entityDAO, waitingTime);
         return instance;
+    }
+    
+    private InformationCollectorThread() {
+        this.entitiesQueue = new LinkedList<>();
     }
     
     private InformationCollectorThread(InformationCollector collector, EntityDAO entityDAO, long waitingTime) {
@@ -58,8 +62,8 @@ public class InformationCollectorThread extends Thread {
             try {
                 if (!entitiesQueue.isEmpty()) {
                     Entity e = getEntitiesQueue().remove();
-                    collector.collect(e);
-                    entityDAO.update(e);
+                    getCollector().collect(e);
+                    getEntityDAO().update(e);
                     Thread.sleep(getWaitingTime());
                 } 
                 Thread.sleep(1000);
@@ -109,6 +113,34 @@ public class InformationCollectorThread extends Thread {
      */
     public void setEntitiesQueue(Queue<Entity> entitiesQueue) {
         this.entitiesQueue = entitiesQueue;
+    }
+
+    /**
+     * @return the entityDAO
+     */
+    public EntityDAO getEntityDAO() {
+        return entityDAO;
+    }
+
+    /**
+     * @param entityDAO the entityDAO to set
+     */
+    public void setEntityDAO(EntityDAO entityDAO) {
+        this.entityDAO = entityDAO;
+    }
+
+    /**
+     * @return the collector
+     */
+    public InformationCollector getCollector() {
+        return collector;
+    }
+
+    /**
+     * @param collector the collector to set
+     */
+    public void setCollector(InformationCollector collector) {
+        this.collector = collector;
     }
 
 }

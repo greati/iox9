@@ -19,6 +19,8 @@ import pso.secondphase.iox9.business.notification.NotificationAgent;
 import pso.secondphase.iox9.business.notification.NotifierChainSingleton;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
 import pso.secondphase.iox9.business.processing.EntityRecognizer;
+import pso.secondphase.iox9.business.processing.InformationCollector;
+import pso.secondphase.iox9.business.processing.InformationCollectorThread;
 import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.business.statistics.StatisticsProcessor;
@@ -26,6 +28,7 @@ import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
+import pso.secondphase.iox9.model.SimpleIORecordType;
 
 /**
  * Load configuration from YAML file using the snakeyaml library.
@@ -45,18 +48,34 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             Map data = (Map) yaml.load(input);
 
             // General attributes
-            System.out.println("capacity="+data.get("capacity"));
-            System.out.println("almost_full="+data.get("almost_full"));
+            ApplicationConfiguration.getInstance().getParameters().put("capacity", data.get("capacity"));
+            ApplicationConfiguration.getInstance().getParameters().put("almost_full", data.get("almost_full"));
+            
+            if (data.get("start_class") != null) {
+                
+            }
             
             Class modelFactoryClass = null;
             Class entityDaoClass = null;
             Class ioRecordDaoClass = null;
             
+            Class collectorClass = null;
+            
             try {
                 modelFactoryClass = Class.forName((String) data.get("model_factory_class"));
                 entityDaoClass = Class.forName((String) data.get("entity_dao_class"));
                 ioRecordDaoClass = Class.forName((String) data.get("iorecord_dao_class"));
-            } catch (ClassNotFoundException ex) {
+                
+                if (data.get("collector") != null) {
+                    Map collectorParams = (Map) data.get("collector");
+                    collectorClass = Class.forName((String) collectorParams.get("class"));
+                    Long sleepTime = ((Integer)collectorParams.get("sleep_time")).longValue();
+                    InformationCollectorThread.getInstance().setWaitingTime(sleepTime);
+                    InformationCollectorThread.getInstance().setCollector((InformationCollector) collectorClass.newInstance());
+                    InformationCollectorThread.getInstance().setEntityDAO((EntityDAO) entityDaoClass.newInstance());
+                }
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -76,29 +95,31 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
                     
                     // Source parameters
                     Map parametersMap = (Map) sourceDescription.get("parameters");
-                    for (Object parameter : parametersMap.entrySet()) {
-                        Map.Entry<String,Object> entry = (Map.Entry<String,Object>) parameter;
-                        sourceInstance.getParameters().put(entry.getKey(), entry.getValue());
+                    if (parametersMap != null) {
+                        for (Object parameter : parametersMap.entrySet()) {
+                            Map.Entry<String,Object> entry = (Map.Entry<String,Object>) parameter;
+                            sourceInstance.getParameters().put(entry.getKey(), entry.getValue());
+                        }
                     }
                     
                     // Recognizer
                     EntityRecognizer recognizer = (EntityRecognizer) 
                             Class.forName((String)sourceDescription.get("recognizer_class")).newInstance();
                     
-                    Long ioType = (Long) sourceDescription.get("io_type");
+                    Long ioType = ((Integer) sourceDescription.get("io_type")).longValue();
                     
                     // Entity Processor
                     String processorClass = (String) sourceDescription.get("processor_class");
-                    EntityProcessor entityProcessor = (EntityProcessor) Class.forName("processorClass")
+                    EntityProcessor entityProcessor = (EntityProcessor) Class.forName(processorClass)
                             .getConstructor(IORecordType.class, ModelAbstractFactory.class, EntityRecognizer.class, 
                                     EntityDAO.class, IORecordDAO.class)
-                            .newInstance(ioType, modelFactoryClass.newInstance(), recognizer, 
+                            .newInstance(SimpleIORecordType.getEnumEntry(ioType), modelFactoryClass.newInstance(), recognizer, 
                                     entityDaoClass.newInstance(), ioRecordDaoClass.newInstance());
                 
                     ApplicationConfiguration.getInstance().getIdentityProcessors().put(sourceId, entityProcessor);
                     
                     // Identity Receiver
-                    Long sleepTime = (Long) sourceDescription.get("sleep_time");
+                    Long sleepTime = ((Integer) sourceDescription.get("sleep_time")).longValue();
                     
                     IdentityDataReceiver receiver = new IdentityDataReceiver(sourceInstance, 
                             entityProcessor, sleepTime);
@@ -160,26 +181,43 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
                 String className = (String) viewDescription.get("class");
                 String id = (String) viewDescription.get("id");
                 Boolean notifiable = (Boolean) viewDescription.get("notifiable");
+                Boolean initial = viewDescription.get("initial") != null ? 
+                        (Boolean) viewDescription.get("initial") : false;
+                
+                System.out.println(className);
                 
                 try {
                     Observer objView = (Observer) Class.forName(className).newInstance();
+                    
+                    objView.setId(id);
+                    
+                    ApplicationConfiguration.getInstance().getViews().put(id, objView);
+                    
+                    if (initial)
+                        ApplicationConfiguration.getInstance().setInitialView((StartableView) objView);
                     
                     if (notifiable)
                         NotifierChainSingleton.getInstance().addObserver(objView);
                     
                     // Register as processors observer
-                    for (Object poi : (List<?>) viewDescription.get("processors_of_interest")) {
-                        String procId = (String) poi;
-                        ApplicationConfiguration.getInstance().getIdentityProcessors().get(procId)
-                                .addObserver(objView);
+                    if (viewDescription.get("processors_of_interest") != null) {
+                        for (Object poi : (List<?>) viewDescription.get("processors_of_interest")) {
+                            String procId = (String) poi;
+                            ApplicationConfiguration.getInstance().getIdentityProcessors().get(procId)
+                                    .addObserver(objView);
+                        }
                     }
                     
                     // Register as statistics observer
-                    for (Object stat : (List<?>) viewDescription.get("statistics_of_interest")) {
-                        String statId = (String) stat;
-                        ApplicationConfiguration.getInstance().getIdentityProcessors().get(statId)
-                            .addObserver(objView);
-                    }                                        
+                    if (viewDescription.get("statistics_of_interest") != null) {
+                        for (Object stat : (List<?>) viewDescription.get("statistics_of_interest")) {
+                            String statId = (String) stat;
+                            ApplicationConfiguration.getInstance().getIdentityProcessors().get(statId)
+                                .addObserver(objView);
+                        }                                        
+                    }
+                    
+                    
                     
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
                     Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);

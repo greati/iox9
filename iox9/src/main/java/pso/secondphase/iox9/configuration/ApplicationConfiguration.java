@@ -8,8 +8,8 @@ package pso.secondphase.iox9.configuration;
 import java.util.HashMap;
 import java.util.Map;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
-import pso.secondphase.iox9.business.capture.IdentityDataSource;
 import pso.secondphase.iox9.business.processing.EntityProcessor;
+import pso.secondphase.iox9.business.processing.Observer;
 import pso.secondphase.iox9.business.statistics.StatisticsProcessor;
 
 /**
@@ -24,6 +24,8 @@ public class ApplicationConfiguration {
     private Map<String, IdentityDataReceiver> sourceReceivers;
     private Map<String, EntityProcessor> identityProcessors;
     private Map<String, StatisticsProcessor> statisticsProcessors;
+    private Map<String, Observer> views;
+    private StartableView initialView;
     
     private Long entityCount = new Long(0);
     
@@ -41,6 +43,8 @@ public class ApplicationConfiguration {
         this.identityProcessors = new HashMap<>();
         this.sourceReceivers = new HashMap<>();
         this.statisticsProcessors = new HashMap<>();
+        this.views = new HashMap<>();
+
     }
     
     public Map<String,Object> getParameters() {
@@ -99,6 +103,34 @@ public class ApplicationConfiguration {
      */
     public void setStatisticsProcessors(Map<String, StatisticsProcessor> statisticsProcessors) {
         this.statisticsProcessors = statisticsProcessors;
+    }
+
+    /**
+     * @return the initialView
+     */
+    public StartableView getInitialView() {
+        return initialView;
+    }
+
+    /**
+     * @param initialView the initialView to set
+     */
+    public void setInitialView(StartableView initialView) {
+        this.initialView = initialView;
+    }
+
+    /**
+     * @return the views
+     */
+    public Map<String, Observer> getViews() {
+        return views;
+    }
+
+    /**
+     * @param views the views to set
+     */
+    public void setViews(Map<String, Observer> views) {
+        this.views = views;
     }
     
 }

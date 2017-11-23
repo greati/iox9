@@ -15,7 +15,7 @@ public class GeneralModelFactory implements ModelAbstractFactory {
 
     @Override
     public Entity createEntity(String identifier) {
-        return new Vehicle(identifier);
+        return new Entity(identifier);
     }
 
     @Override

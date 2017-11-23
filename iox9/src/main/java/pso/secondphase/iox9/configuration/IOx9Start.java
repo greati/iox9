@@ -8,6 +8,7 @@ package pso.secondphase.iox9.configuration;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
+import pso.secondphase.iox9.business.processing.InformationCollectorThread;
 
 /**
  *
@@ -15,21 +16,28 @@ import pso.secondphase.iox9.business.capture.IdentityDataReceiver;
  */
 public class IOx9Start {
     
-    private static ConfigurationLoader configLoader;
-    
-    public IOx9Start() {
-        IOx9Start.configLoader = new SnakeYamlConfigurationLoader();
-    }
-    
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        
+        ConfigurationLoader configLoader = new SnakeYamlConfigurationLoader();;
+        
         Path currentRelativePath = Paths.get("");
         String path = currentRelativePath.toAbsolutePath().toString();
         configLoader.load(path + "/src/main/resources/iox9config.yaml");
+        
+        System.out.println("Identity processors: " + ApplicationConfiguration.getInstance().getIdentityProcessors().size());
         
         for (IdentityDataReceiver idr : ApplicationConfiguration.getInstance().getSourceReceivers().values()) {
             idr.setDaemon(true);
             idr.start();
         }
+        
+        if (InformationCollectorThread.getInstance().getCollector() != null) {
+            InformationCollectorThread.getInstance().setDaemon(true);
+            InformationCollectorThread.getInstance().start();
+        }
+        
+        while(true)
+            Thread.sleep(10);
     }
     
 }
