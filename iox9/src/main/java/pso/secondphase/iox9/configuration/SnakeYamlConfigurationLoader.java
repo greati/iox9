@@ -32,10 +32,10 @@ import pso.secondphase.iox9.model.ModelAbstractFactory;
  * 
  * @author vitorgreati
  */
-public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
+public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //implements ConfigurationLoader {
 
-    //@Override
-    public static void load(String uri) {
+    @Override
+    public void load(String uri) {
         InputStream input = null;
         try {
             input = new FileInputStream(uri);
@@ -198,10 +198,5 @@ public class SnakeYamlConfigurationLoader { //implements ConfigurationLoader {
         }
     }
 
-    public static void main(String[] args) {
-        Path currentRelativePath = Paths.get("");
-        String path = currentRelativePath.toAbsolutePath().toString();
-        load(path + "/src/main/resources/iox9config.yaml");
-    }
-    
+
 }
