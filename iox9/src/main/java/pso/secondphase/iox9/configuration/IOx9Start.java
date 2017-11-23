@@ -36,6 +36,9 @@ public class IOx9Start {
             InformationCollectorThread.getInstance().start();
         }
         
+        if(ApplicationConfiguration.getInstance().getInitialView() != null)
+            ApplicationConfiguration.getInstance().getInitialView().start();
+        
         while(true)
             Thread.sleep(10);
     }

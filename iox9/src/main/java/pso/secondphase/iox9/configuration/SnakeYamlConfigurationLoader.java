@@ -52,7 +52,9 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             ApplicationConfiguration.getInstance().getParameters().put("almost_full", data.get("almost_full"));
             
             if (data.get("start_class") != null) {
-                
+                ApplicationConfiguration.getInstance().setInitialView(
+                      (StartableView) Class.forName((String)data.get("start_class")).newInstance()
+                );
             }
             
             Class modelFactoryClass = null;
@@ -226,6 +228,12 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             }
 
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(SnakeYamlConfigurationLoader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {

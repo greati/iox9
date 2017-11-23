@@ -70,13 +70,13 @@ notification_agents:
 views:
     -
         id: entrance_panel
-        class: "pso.secondphase.rapx9.view.VehicleInTest"
+        class: "pso.secondphase.rapx9.view.VehicleInPanel"
         notifiable: false
         processors_of_interest:
             - entrance_camera
     -
         id: exit_panel
-        class: "pso.secondphase.rapx9.view.VehicleOutTest"
+        class: "pso.secondphase.rapx9.view.VehicleOutPanel"
         notifiable: false
         processors_of_interest:
             - exit_camera
