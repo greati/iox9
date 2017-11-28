@@ -12,6 +12,8 @@ import java.util.logging.Logger;
  */
 public abstract class Observer {
  
+    private String id;
+    
     /**
      * Called when an update must occur after a notification from the observable.
      * 
@@ -27,6 +29,20 @@ public abstract class Observer {
             Logger.getLogger(Observer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    /**
+     * @return the identifier
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param identifier the identifier to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
     
 }

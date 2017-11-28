@@ -159,7 +159,7 @@ public class JDBCEntityDAO implements EntityDAO {
             return null;
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("SELECT DISTINCT e.*, sum(io.io_type) AS frequency ");
+            sb.append("SELECT DISTINCT e.*, count(io.io_type) AS frequency ");
             sb.append("FROM entity AS e, io_record AS io ");
             sb.append("WHERE e.identifier = io.identifier_entity ");
             sb.append("AND io.io_type = ? ");
@@ -212,6 +212,9 @@ public class JDBCEntityDAO implements EntityDAO {
                             break;
                         case "registration_date":
                             e.setRegistrationDate(rs.getDate("registration_date"));
+                            break;
+                        case "frequency":
+                            e.getAttrs().put("frequency", new Attribute<>( rs.getInt("frequency"), "frequency" ));
                             break;
                         default:    
                             Class className = Class.forName( rsmd.getColumnClassName(i) );
