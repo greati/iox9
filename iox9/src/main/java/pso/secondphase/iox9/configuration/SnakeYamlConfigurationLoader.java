@@ -26,6 +26,7 @@ import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.business.statistics.StatisticsProcessor;
 import pso.secondphase.iox9.dao.EntityDAO;
 import pso.secondphase.iox9.dao.IORecordDAO;
+import pso.secondphase.iox9.dao.SimpleJDBCConnectionManager;
 import pso.secondphase.iox9.model.IORecordType;
 import pso.secondphase.iox9.model.ModelAbstractFactory;
 import pso.secondphase.iox9.model.SimpleIORecordType;
@@ -50,6 +51,14 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             // General attributes
             ApplicationConfiguration.getInstance().getParameters().put("capacity", data.get("capacity"));
             ApplicationConfiguration.getInstance().getParameters().put("almost_full", data.get("almost_full"));
+            
+            // Database configuration
+            if (data.get("database") != null) {
+                Map databaseParams = (Map) data.get("database");
+                SimpleJDBCConnectionManager.setDbUrl((String) databaseParams.get("url"));
+                SimpleJDBCConnectionManager.setPassword((String) databaseParams.get("password"));
+                SimpleJDBCConnectionManager.setUsername((String) databaseParams.get("username"));
+            }
             
             if (data.get("start_class") != null) {
                 
