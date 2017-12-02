@@ -235,7 +235,7 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
                     if (viewDescription.get("statistics_of_interest") != null) {
                         for (Object stat : (List<?>) viewDescription.get("statistics_of_interest")) {
                             String statId = (String) stat;
-                            ApplicationConfiguration.getInstance().getIdentityProcessors().get(statId)
+                            ApplicationConfiguration.getInstance().getStatisticsProcessors().get(statId)
                                 .addObserver(objView);
                         }                                        
                     }
