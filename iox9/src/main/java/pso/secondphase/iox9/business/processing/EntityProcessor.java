@@ -62,7 +62,8 @@ public abstract class EntityProcessor<IdentityDataType> extends Observable {
                 populateSpecificValues(identityData, e);
 
                 NotifierChainSingleton.getInstance().notify(ioRecord, this);
-
+                StatisticsChainSingleton.getInstance().process(ioRecord);
+                
                 notifyObservers(ioRecord);
             }
         } catch (InvalidEntityException ex) {
