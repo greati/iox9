@@ -56,6 +56,9 @@ public class VehicleOutPanel extends Observer {
     private ImageView cameraOut;
     
     public VehicleOutPanel(){
+    }
+    
+    public void init() {
         //Initiate grid
         initGrids();
         
@@ -69,8 +72,7 @@ public class VehicleOutPanel extends Observer {
         initImage();
         
         //Initiate time counter
-        initTimeCounter();
-    }
+        initTimeCounter();    }
     
     public GridPane getPanel(){
         return this.vehicleOut;

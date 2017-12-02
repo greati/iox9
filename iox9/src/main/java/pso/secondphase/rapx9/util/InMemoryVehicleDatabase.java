@@ -19,7 +19,15 @@ public class InMemoryVehicleDatabase {
     private volatile List<String> outsideCars;
     private volatile List<String> insideCars;
 
-    public InMemoryVehicleDatabase() {
+    private static InMemoryVehicleDatabase instance;
+    
+    public static InMemoryVehicleDatabase getInstance() {
+        if (instance == null)
+            instance = new InMemoryVehicleDatabase();
+        return instance;
+    }
+    
+    private InMemoryVehicleDatabase() {
         outsideCars = new ArrayList<>();
         insideCars = new ArrayList<>();
         

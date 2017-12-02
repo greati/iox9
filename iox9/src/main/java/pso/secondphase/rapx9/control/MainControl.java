@@ -25,7 +25,7 @@ import pso.secondphase.iox9.business.statistics.StatisticsChainSingleton;
 import pso.secondphase.iox9.dao.JDBCEntityDAO;
 import pso.secondphase.iox9.dao.JDBCIORecordDAO;
 import pso.secondphase.iox9.model.SimpleIORecordType;
-import pso.secondphase.iox9.model.VehicleFactory;
+import pso.secondphase.iox9.model.GeneralModelFactory;
 import pso.secondphase.rapx9.util.InMemoryVehicleDatabase;
 import pso.secondphase.rapx9.view.ChartsPanel;
 import pso.secondphase.rapx9.view.NotificationPanel;
@@ -79,16 +79,16 @@ public class MainControl {
         }
         
         this.inProcessor = 
-                new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
+                new VehicleInProcessor(SimpleIORecordType.IN, new GeneralModelFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
         
         this.outProcessor = 
-                new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
+                new VehicleOutProcessor(SimpleIORecordType.OUT, new GeneralModelFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
         
-        database = new InMemoryVehicleDatabase();
+        database = InMemoryVehicleDatabase.getInstance();
         inCameraDs = new InDataSourceSavedImage("entrance_camera", database);
         outCameraDs = new OutDataSourceSavedImage("exit_camera", database);
         
@@ -135,12 +135,12 @@ public class MainControl {
 
         // Processors
         VehicleInProcessor inProcessor = 
-                new VehicleInProcessor(SimpleIORecordType.IN, new VehicleFactory(),
+                new VehicleInProcessor(SimpleIORecordType.IN, new GeneralModelFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 
         VehicleOutProcessor outProcessor = 
-                new VehicleOutProcessor(SimpleIORecordType.OUT, new VehicleFactory(),
+                new VehicleOutProcessor(SimpleIORecordType.OUT, new GeneralModelFactory(),
                 new OpenCVUFRNLicensePlateReconizer(), new JDBCEntityDAO(),
                 new JDBCIORecordDAO());
 

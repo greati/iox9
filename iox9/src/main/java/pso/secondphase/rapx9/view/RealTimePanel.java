@@ -11,13 +11,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import nu.pattern.OpenCV;
+import pso.secondphase.iox9.configuration.ApplicationConfiguration;
+import pso.secondphase.iox9.configuration.StartableView;
 import pso.secondphase.rapx9.control.MainControl;
 
 /**
  *
  * @author vinihcampos
  */
-public class RealTimePanel extends Application{
+public class RealTimePanel extends Application implements StartableView {
     
     static{ OpenCV.loadLocally(); }
     
@@ -38,8 +40,12 @@ public class RealTimePanel extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         
-        vehicleInPanel = new VehicleInPanel();
-        vehicleOutPanel = new VehicleOutPanel();
+        vehicleInPanel = (VehicleInPanel) ApplicationConfiguration.getInstance().getViews().get("entrance_panel");//new VehicleInPanel();
+        vehicleInPanel.init();
+        
+        vehicleOutPanel = (VehicleOutPanel) ApplicationConfiguration.getInstance().getViews().get("exit_panel");
+        vehicleOutPanel.init();
+        
         graphsPanel = new ChartsPanel();
         notificationPanel = new NotificationPanel();
         
@@ -64,7 +70,7 @@ public class RealTimePanel extends Application{
         //Displaying the contents of the stage 
         stage.show(); 
         
-        control = new MainControl(vehicleInPanel, vehicleOutPanel, graphsPanel, notificationPanel);
+        //control = new MainControl(vehicleInPanel, vehicleOutPanel, graphsPanel, notificationPanel);
     }
     
     /**
@@ -102,6 +108,11 @@ public class RealTimePanel extends Application{
         
         //Setting content postion
         rootPane.add(content, 0, 1);
+    }
+
+    @Override
+    public void start() {
+        Application.launch("");
     }
     
 }

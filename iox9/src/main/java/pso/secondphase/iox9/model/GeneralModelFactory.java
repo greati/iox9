@@ -11,11 +11,11 @@ import java.util.Date;
  *
  * @author vitorgreati
  */
-public class VehicleFactory implements ModelAbstractFactory {
+public class GeneralModelFactory implements ModelAbstractFactory {
 
     @Override
     public Entity createEntity(String identifier) {
-        return new Vehicle(identifier);
+        return new Entity(identifier);
     }
 
     @Override

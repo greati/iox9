@@ -58,6 +58,9 @@ public class VehicleInPanel extends Observer {
     private ImageView cameraIn;
     
     public VehicleInPanel(){
+    }
+    
+    public void init() {
         //Initiate grid
         initGrids();
         
