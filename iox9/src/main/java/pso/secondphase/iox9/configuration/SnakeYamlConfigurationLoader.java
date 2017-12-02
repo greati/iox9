@@ -49,6 +49,14 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             Map data = (Map) yaml.load(input);
 
             // General attributes
+            if (data.get("extra") != null) {
+                Map generalParams = (Map) data.get("extra");
+                for (Object parameter : generalParams.entrySet()) {
+                    Map.Entry<String,Object> entry = (Map.Entry<String,Object>) parameter;
+                    ApplicationConfiguration.getInstance().getParameters().put(entry.getKey(), entry.getValue());
+                }            
+            }
+            
             ApplicationConfiguration.getInstance().getParameters().put("capacity", data.get("capacity"));
             ApplicationConfiguration.getInstance().getParameters().put("almost_full", data.get("almost_full"));
             
