@@ -159,7 +159,7 @@ public class SnakeYamlConfigurationLoader implements ConfigurationLoader { //imp
             
             // Statistics processors
             StatisticsProcessor last = null;
-            for (Object statistic : (List<?>)data.get("statictics_processors")) {
+            for (Object statistic : (List<?>)data.get("statistics_processors")) {
                 Map statisticProcessor = (Map) statistic;
                 String id = (String) statisticProcessor.get("id");
                 String statClass = (String) statisticProcessor.get("class");
